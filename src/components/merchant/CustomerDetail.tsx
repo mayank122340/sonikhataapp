@@ -175,15 +175,6 @@ export const CustomerDetail: React.FC<CustomerDetailProps> = ({
 
         {/* Action Buttons */}
         <div className="flex items-center space-x-1.5 md:space-x-2 shrink-0">
-          <a
-            href={whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="p-2 md:p-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs md:text-sm font-bold shadow-2xs flex items-center gap-1"
-          >
-            <Share2 className="w-3.5 h-3.5 md:w-4 md:h-4" />
-            <span className="hidden sm:inline">{t('whatsapp')}</span>
-          </a>
           <button
             onClick={() => setIsBillModalOpen(true)}
             className="p-2 md:p-3 bg-gray-900 hover:bg-gray-800 text-white rounded-lg text-xs md:text-sm font-bold shadow-2xs flex items-center gap-1"

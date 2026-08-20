@@ -80,7 +80,8 @@ const translations = {
     downloadBackup: 'Download Backup',
     backupIndex: 'Backup Index',
     backupDesc: 'Download offline database backup file of all customer accounts and transaction history. Keep these files safe for recovery.',
-    self: 'Self'
+    self: 'Self',
+    optional: 'Optional'
   },
   gu: {
     money: 'નાણાં (રૂપિયા)',
@@ -159,7 +160,8 @@ const translations = {
     backToDashboard: 'ડેશબોર્ડ પર પાછા',
     downloadBackup: 'બેકઅપ ડાઉનલોડ કરો',
     backupIndex: 'બેકઅપ ક્રમ',
-    backupDesc: 'બધા ગ્રાહક ખાતાઓ અને વ્યવહારના ઇતિહાસની ઑફલાઇન ડેટાબેઝ બેકઅપ ફાઇલ ડાઉનલોડ કરો. પુનઃપ્રાપ્તિ માટે આ ફાઇલોને સુરક્ષિત રાખો.'
+    backupDesc: 'બધા ગ્રાહક ખાતાઓ અને વ્યવહારના ઇતિહાસની ઑફલાઇન ડેટાબેઝ બેકઅપ ફાઇલ ડાઉનલોડ કરો. પુનઃપ્રાપ્તિ માટે આ ફાઇલોને સુરક્ષિત રાખો.',
+    optional: 'વૈકલ્પિક'
   }
 };
 

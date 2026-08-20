@@ -92,7 +92,7 @@ export const CustomerModal: React.FC<CustomerModalProps> = ({
 
           <div>
             <label className="block text-sm md:text-base font-black text-gray-800 mb-1.5 md:mb-2">
-              {t('phone')} *
+              {t('phone')} ({t('optional')})
             </label>
             <div className="relative">
               <Phone className="w-4.5 h-4.5 md:w-5 md:h-5 absolute left-3.5 md:left-4 top-3.5 md:top-4.5 text-gray-400" />
@@ -102,7 +102,6 @@ export const CustomerModal: React.FC<CustomerModalProps> = ({
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="+91 98765 43210"
                 className="w-full pl-10 md:pl-12 pr-3.5 py-3 md:py-4 rounded-xl border border-gray-300 focus:ring-2 focus:ring-gold-500 text-sm md:text-base font-extrabold text-gray-900"
-                required
               />
             </div>
           </div>

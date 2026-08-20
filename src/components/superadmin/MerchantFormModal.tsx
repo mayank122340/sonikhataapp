@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Merchant, TenantConfig } from '../../types';
 import { X, Store, Sparkles, Award, Upload } from '../common/Icons';
 
@@ -15,6 +15,8 @@ export const MerchantFormModal: React.FC<MerchantFormModalProps> = ({
   onSave,
   initialMerchant
 }) => {
+  const logoFileInputRef = useRef<HTMLInputElement>(null);
+  const [isUploadingLogo, setIsUploadingLogo] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [subscriptionActive, setSubscriptionActive] = useState(true);
@@ -33,6 +35,62 @@ export const MerchantFormModal: React.FC<MerchantFormModalProps> = ({
   const [enableSilver, setEnableSilver] = useState(true);
   const [enableBillPhotos, setEnableBillPhotos] = useState(false);
   const [entryFormLayout, setEntryFormLayout] = useState<'remarks_first' | 'assets_first'>('remarks_first');
+
+  const compressImage = (file: File): Promise<string> => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        const img = new window.Image();
+        img.src = event.target?.result as string;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const MAX_WIDTH = 400;
+          const MAX_HEIGHT = 400;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > MAX_WIDTH) {
+              height = Math.round((height * MAX_WIDTH) / width);
+              width = MAX_WIDTH;
+            }
+          } else {
+            if (height > MAX_HEIGHT) {
+              width = Math.round((width * MAX_HEIGHT) / height);
+              height = MAX_HEIGHT;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          if (ctx) {
+            ctx.drawImage(img, 0, 0, width, height);
+            resolve(canvas.toDataURL('image/jpeg', 0.7));
+          } else {
+            resolve(event.target?.result as string);
+          }
+        };
+        img.onerror = () => resolve(event.target?.result as string);
+      };
+      reader.onerror = () => resolve('');
+    });
+  };
+
+  const handleLogoFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+    setIsUploadingLogo(true);
+    try {
+      const compressed = await compressImage(files[0]);
+      setLogoUrl(compressed);
+    } catch (err) {
+      console.error('Logo upload failed:', err);
+    } finally {
+      setIsUploadingLogo(false);
+    }
+  };
 
   useEffect(() => {
     if (initialMerchant) {
@@ -173,14 +231,36 @@ export const MerchantFormModal: React.FC<MerchantFormModalProps> = ({
 
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <label className="block text-[10px] font-semibold text-gray-700 mb-0.5">Logo URL (Optional)</label>
+                <label className="block text-[10px] font-bold text-gray-800 mb-0.5">Shop Logo (Optional)</label>
                 <input
-                  type="url"
-                  value={logoUrl}
-                  onChange={(e) => setLogoUrl(e.target.value)}
-                  placeholder="https://logo.png"
-                  className="w-full px-2.5 py-1.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 text-xs font-medium"
+                  type="file"
+                  ref={logoFileInputRef}
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleLogoFileChange}
                 />
+                <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => logoFileInputRef.current?.click()}
+                    className="flex-1 px-2.5 py-1.5 bg-purple-50 hover:bg-purple-100 border border-purple-300 text-purple-900 rounded-lg text-[10px] font-black text-center active:scale-95 transition-transform flex items-center justify-center gap-1"
+                  >
+                    <Upload className="w-3 h-3 text-purple-700 shrink-0" />
+                    <span>{isUploadingLogo ? 'Processing...' : 'Choose Logo'}</span>
+                  </button>
+                  {logoUrl && (
+                    <div className="relative w-7 h-7 rounded border border-gray-200 overflow-hidden shrink-0">
+                      <img src={logoUrl} alt="Logo Preview" className="w-full h-full object-cover" />
+                      <button
+                        type="button"
+                        onClick={() => setLogoUrl('')}
+                        className="absolute inset-0 bg-black/50 text-white flex items-center justify-center text-[8px] font-bold hover:bg-black/75 opacity-0 hover:opacity-100 transition-opacity"
+                      >
+                        Del
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
 
               <div>

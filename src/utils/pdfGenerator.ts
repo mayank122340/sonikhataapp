@@ -1,4 +1,5 @@
 import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
 import { Customer, LedgerEntry, TenantConfig } from '../types';
 
 export const generateAndShareRealPdfDocument = async (
@@ -25,50 +26,51 @@ export const generateAndShareRealPdfDocument = async (
 
     const fileName = `${customer.name.replace(/\s+/g, '_')}_Tax_Invoice`;
 
-    // 2. Convert Canvas to PNG Blob
-    canvas.toBlob(async (blob) => {
-      if (!blob) {
-        window.print();
+    // 2. Generate proper PDF document using jsPDF
+    const imgData = canvas.toDataURL('image/jpeg', 1.0);
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const imgWidth = 210; // A4 size width in mm
+    const pageHeight = 297; // A4 size height in mm
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    let heightLeft = imgHeight;
+    let position = 0;
+
+    pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
+    heightLeft -= pageHeight;
+
+    while (heightLeft >= 0) {
+      position = heightLeft - imgHeight;
+      pdf.addPage();
+      pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+    }
+
+    const pdfBlob = pdf.output('blob');
+    const pdfFile = new File([pdfBlob], `${fileName}.pdf`, { type: 'application/pdf' });
+
+    const shareText = `📄 *Tax Invoice Bill Statement from ${tenant.shopName}*\n\nNamaste ${customer.name}, your bill PDF is here:`;
+
+    // 3. Native Mobile Web Share API with Visual Bill PDF File
+    if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+      try {
+        await navigator.share({
+          files: [pdfFile],
+          title: `${tenant.shopName} Bill Invoice`,
+          text: shareText
+        });
         return;
+      } catch (shareErr) {
+        console.log('Mobile share cancelled or fallback triggered');
       }
+    }
 
-      // Create Image File for WhatsApp Attachment
-      const imageFile = new File([blob], `${fileName}.png`, { type: 'image/png' });
+    // 4. Fallback: Save PDF File & Open WhatsApp Chat (opens contact selector)
+    pdf.save(`${fileName}.pdf`);
 
-      // Clean phone number for WhatsApp
-      let phone = customer.phone.replace(/[^0-9]/g, '');
-      if (phone.length === 10) {
-        phone = '91' + phone;
-      }
-
-      const shareText = `📄 *Tax Invoice Bill Statement from ${tenant.shopName}*\n\nNamaste ${customer.name}, your visual bill is here:`;
-
-      // 3. Native Mobile Web Share API with Visual Bill Image File
-      if (navigator.canShare && navigator.canShare({ files: [imageFile] })) {
-        try {
-          await navigator.share({
-            files: [imageFile],
-            title: `${tenant.shopName} Bill Invoice`,
-            text: shareText
-          });
-          return;
-        } catch (shareErr) {
-          console.log('Mobile share cancelled or fallback triggered');
-        }
-      }
-
-      // 4. Fallback: Save Bill & Open WhatsApp Chat Directly
-      const link = document.createElement('a');
-      link.download = `${fileName}.png`;
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-
-      setTimeout(() => {
-        const textMsg = encodeURIComponent(shareText);
-        window.open(`https://wa.me/${phone}?text=${textMsg}`, '_blank');
-      }, 500);
-
-    }, 'image/png');
+    setTimeout(() => {
+      const textMsg = encodeURIComponent(shareText);
+      window.open(`https://api.whatsapp.com/send?text=${textMsg}`, '_blank');
+    }, 500);
 
   } catch (e) {
     console.error('Bill capture error:', e);
