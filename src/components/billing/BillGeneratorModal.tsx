@@ -62,6 +62,16 @@ export const BillGeneratorModal: React.FC<BillGeneratorModalProps> = ({
   const showGoldOnBill = isGoldEnabled || hasHistoricalGold;
   const showSilverOnBill = isSilverEnabled || hasHistoricalSilver;
 
+  // Calculate specific totals for Udhar and Jama
+  const totalMoneyUdhar = displayEntries.reduce((sum, e) => sum + (e.moneyType === 'udhar' ? e.moneyAmount : 0), 0);
+  const totalMoneyJama = displayEntries.reduce((sum, e) => sum + (e.moneyType === 'jama' ? e.moneyAmount : 0), 0);
+
+  const totalGoldUdhar = displayEntries.reduce((sum, e) => sum + (e.goldType === 'udhar' ? e.goldWeightGrams : 0), 0);
+  const totalGoldJama = displayEntries.reduce((sum, e) => sum + (e.goldType === 'jama' ? e.goldWeightGrams : 0), 0);
+
+  const totalSilverUdhar = displayEntries.reduce((sum, e) => sum + (e.silverType === 'udhar' ? e.silverWeightGrams : 0), 0);
+  const totalSilverJama = displayEntries.reduce((sum, e) => sum + (e.silverType === 'jama' ? e.silverWeightGrams : 0), 0);
+
   const balance = calculateCustomerBalance(entries);
   const todayStr = formatDate(new Date().toISOString());
   const invoiceNo = `INV-${new Date().getFullYear()}-${String(Date.now()).slice(-4)}`;
@@ -135,10 +145,10 @@ export const BillGeneratorModal: React.FC<BillGeneratorModalProps> = ({
           <div className="p-4 sm:p-8 space-y-4 text-charcoal-900 bg-white">
             
             {/* Top Auspicious Header Line */}
-            <div className="text-center border-b border-gold-200 pb-1.5">
-              <span className="text-xs font-bold text-amber-800 tracking-widest uppercase">
-                ॥ श्री गणेशाय नमः ॥
-              </span>
+            <div className="flex justify-between items-center border-b border-gold-200 pb-1.5 text-[9px] sm:text-xs font-black text-amber-800 tracking-wider">
+              <span>॥ श्री गणेशाय नमः ॥</span>
+              <span>॥ श्रीहरि ॥</span>
+              <span>॥ श्री कष्टभंजनदेवाय नमः ॥</span>
             </div>
 
             {/* Shop White-Label Header Banner */}
@@ -325,70 +335,112 @@ export const BillGeneratorModal: React.FC<BillGeneratorModalProps> = ({
                 1 + (showGoldOnBill ? 1 : 0) + (showSilverOnBill ? 1 : 0) === 3 ? 'grid-cols-3' : 1 + (showGoldOnBill ? 1 : 0) + (showSilverOnBill ? 1 : 0) === 2 ? 'grid-cols-2' : 'grid-cols-1'
               } gap-2 text-center`}>
                 
-                {/* Net Money */}
-                <div className="bg-white p-2 sm:p-2.5 rounded-xl border border-gold-300 shadow-2xs">
-                  <span className="text-[9px] sm:text-[10px] font-bold text-gray-500 uppercase flex items-center justify-center gap-1">
-                    <Coins className="w-3 h-3 text-emerald-600" /> {t('money')}
-                  </span>
-                  <p className={`text-xs sm:text-sm font-black font-mono mt-0.5 ${
-                    balance.netMoney > 0 ? 'text-udhar' : balance.netMoney < 0 ? 'text-jama' : 'text-gray-700'
-                  }`}>
-                    {balance.netMoney > 0
-                      ? `₹${Math.round(balance.netMoney).toLocaleString('en-IN')}`
-                      : balance.netMoney < 0
-                      ? `₹${Math.round(Math.abs(balance.netMoney)).toLocaleString('en-IN')}`
-                      : '₹0'}
-                  </p>
-                  <span className={`text-[8px] sm:text-[9px] font-bold px-1.5 py-0.2 rounded uppercase inline-block mt-0.5 ${
-                    balance.netMoney > 0 ? 'bg-red-100 text-udhar' : balance.netMoney < 0 ? 'bg-emerald-100 text-jama' : 'bg-gray-100 text-gray-500'
-                  }`}>
-                    {balance.netMoney > 0 ? t('netUdhar') : balance.netMoney < 0 ? t('netJama') : t('settled')}
-                  </span>
+                 {/* Net Money */}
+                <div className="bg-white p-2 sm:p-2.5 rounded-xl border border-gold-300 shadow-2xs flex flex-col justify-between text-center">
+                  <div>
+                    <span className="text-[9px] sm:text-[10px] font-bold text-gray-500 uppercase flex items-center justify-center gap-1">
+                      <Coins className="w-3 h-3 text-emerald-600" /> {t('money')}
+                    </span>
+                    <p className={`text-xs sm:text-sm font-black font-mono mt-0.5 ${
+                      balance.netMoney > 0 ? 'text-udhar' : balance.netMoney < 0 ? 'text-jama' : 'text-gray-700'
+                    }`}>
+                      {balance.netMoney > 0
+                        ? `₹${Math.round(balance.netMoney).toLocaleString('en-IN')}`
+                        : balance.netMoney < 0
+                        ? `₹${Math.round(Math.abs(balance.netMoney)).toLocaleString('en-IN')}`
+                        : '₹0'}
+                    </p>
+                    <span className={`text-[8px] sm:text-[9px] font-bold px-1.5 py-0.2 rounded uppercase inline-block mt-0.5 ${
+                      balance.netMoney > 0 ? 'bg-red-100 text-udhar' : balance.netMoney < 0 ? 'bg-emerald-100 text-jama' : 'bg-gray-100 text-gray-500'
+                    }`}>
+                      {balance.netMoney > 0 ? t('netUdhar') : balance.netMoney < 0 ? t('netJama') : t('settled')}
+                    </span>
+                  </div>
+
+                  {/* Specific Udhar / Jama Breakdown */}
+                  <div className="mt-2 pt-1 border-t border-gray-150 flex items-center justify-between text-[8px] sm:text-[9px] text-gray-500 font-semibold gap-1">
+                    <div className="text-left">
+                      <span className="block text-[6.5px] text-gray-400 font-extrabold uppercase">{t('udhar')}</span>
+                      <span className="font-mono text-udhar font-bold">₹{Math.round(totalMoneyUdhar).toLocaleString('en-IN')}</span>
+                    </div>
+                    <div className="text-right">
+                      <span className="block text-[6.5px] text-gray-400 font-extrabold uppercase">{t('jama')}</span>
+                      <span className="font-mono text-jama font-bold">₹{Math.round(totalMoneyJama).toLocaleString('en-IN')}</span>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Net Gold */}
                 {showGoldOnBill && (
-                  <div className="bg-white p-2 sm:p-2.5 rounded-xl border border-gold-300 shadow-2xs">
-                    <span className="text-[9px] sm:text-[10px] font-bold text-amber-900 uppercase flex items-center justify-center gap-1">
-                      <Sparkles className="w-3 h-3 text-amber-600" /> {t('gold')}
-                    </span>
-                    <p className={`text-xs sm:text-sm font-black font-mono mt-0.5 ${
-                      balance.netGold > 0 ? 'text-udhar' : balance.netGold < 0 ? 'text-jama' : 'text-gray-700'
-                    }`}>
-                      {balance.netGold > 0
-                        ? `${balance.netGold.toFixed(2)}g`
-                        : balance.netGold < 0
-                        ? `${Math.abs(balance.netGold).toFixed(2)}g`
-                        : '0.00g'}
-                    </p>
-                    <span className={`text-[8px] sm:text-[9px] font-bold px-1.5 py-0.2 rounded uppercase inline-block mt-0.5 ${
-                      balance.netGold > 0 ? 'bg-red-100 text-udhar' : balance.netGold < 0 ? 'bg-emerald-100 text-jama' : 'bg-gray-100 text-gray-500'
-                    }`}>
-                      {balance.netGold > 0 ? t('netUdhar') : balance.netGold < 0 ? t('netJama') : t('settled')}
-                    </span>
+                  <div className="bg-white p-2 sm:p-2.5 rounded-xl border border-gold-300 shadow-2xs flex flex-col justify-between text-center">
+                    <div>
+                      <span className="text-[9px] sm:text-[10px] font-bold text-amber-900 uppercase flex items-center justify-center gap-1">
+                        <Sparkles className="w-3 h-3 text-amber-600" /> {t('gold')}
+                      </span>
+                      <p className={`text-xs sm:text-sm font-black font-mono mt-0.5 ${
+                        balance.netGold > 0 ? 'text-udhar' : balance.netGold < 0 ? 'text-jama' : 'text-gray-700'
+                      }`}>
+                        {balance.netGold > 0
+                          ? `${balance.netGold.toFixed(2)}g`
+                          : balance.netGold < 0
+                          ? `${Math.abs(balance.netGold).toFixed(2)}g`
+                          : '0.00g'}
+                      </p>
+                      <span className={`text-[8px] sm:text-[9px] font-bold px-1.5 py-0.2 rounded uppercase inline-block mt-0.5 ${
+                        balance.netGold > 0 ? 'bg-red-100 text-udhar' : balance.netGold < 0 ? 'bg-emerald-100 text-jama' : 'bg-gray-100 text-gray-500'
+                      }`}>
+                        {balance.netGold > 0 ? t('netUdhar') : balance.netGold < 0 ? t('netJama') : t('settled')}
+                      </span>
+                    </div>
+
+                    {/* Specific Udhar / Jama Breakdown */}
+                    <div className="mt-2 pt-1 border-t border-gray-150 flex items-center justify-between text-[8px] sm:text-[9px] text-gray-500 font-semibold gap-1">
+                      <div className="text-left">
+                        <span className="block text-[6.5px] text-gray-400 font-extrabold uppercase">{t('udhar')}</span>
+                        <span className="font-mono text-udhar font-bold">{totalGoldUdhar.toFixed(2)}g</span>
+                      </div>
+                      <div className="text-right">
+                        <span className="block text-[6.5px] text-gray-400 font-extrabold uppercase">{t('jama')}</span>
+                        <span className="font-mono text-jama font-bold">{totalGoldJama.toFixed(2)}g</span>
+                      </div>
+                    </div>
                   </div>
                 )}
 
                 {/* Net Silver */}
                 {showSilverOnBill && (
-                  <div className="bg-white p-2 sm:p-2.5 rounded-xl border border-gold-300 shadow-2xs">
-                    <span className="text-[9px] sm:text-[10px] font-bold text-slate-700 uppercase flex items-center justify-center gap-1">
-                      <Award className="w-3 h-3 text-slate-600" /> {t('silver')}
-                    </span>
-                    <p className={`text-xs sm:text-sm font-black font-mono mt-0.5 ${
-                      balance.netSilver > 0 ? 'text-udhar' : balance.netSilver < 0 ? 'text-jama' : 'text-gray-700'
-                    }`}>
-                      {balance.netSilver > 0
-                        ? `${balance.netSilver.toFixed(1)}g`
-                        : balance.netSilver < 0
-                        ? `${Math.abs(balance.netSilver).toFixed(1)}g`
-                        : '0.0g'}
-                    </p>
-                    <span className={`text-[8px] sm:text-[9px] font-bold px-1.5 py-0.2 rounded uppercase inline-block mt-0.5 ${
-                      balance.netSilver > 0 ? 'bg-red-100 text-udhar' : balance.netSilver < 0 ? 'bg-emerald-100 text-jama' : 'bg-gray-100 text-gray-500'
-                    }`}>
-                      {balance.netSilver > 0 ? t('netUdhar') : balance.netSilver < 0 ? t('netJama') : t('settled')}
-                    </span>
+                  <div className="bg-white p-2 sm:p-2.5 rounded-xl border border-gold-300 shadow-2xs flex flex-col justify-between text-center">
+                    <div>
+                      <span className="text-[9px] sm:text-[10px] font-bold text-slate-700 uppercase flex items-center justify-center gap-1">
+                        <Award className="w-3 h-3 text-slate-600" /> {t('silver')}
+                      </span>
+                      <p className={`text-xs sm:text-sm font-black font-mono mt-0.5 ${
+                        balance.netSilver > 0 ? 'text-udhar' : balance.netSilver < 0 ? 'text-jama' : 'text-gray-700'
+                      }`}>
+                        {balance.netSilver > 0
+                          ? `${balance.netSilver.toFixed(1)}g`
+                          : balance.netSilver < 0
+                          ? `${Math.abs(balance.netSilver).toFixed(1)}g`
+                          : '0.0g'}
+                      </p>
+                      <span className={`text-[8px] sm:text-[9px] font-bold px-1.5 py-0.2 rounded uppercase inline-block mt-0.5 ${
+                        balance.netSilver > 0 ? 'bg-red-100 text-udhar' : balance.netSilver < 0 ? 'bg-emerald-100 text-jama' : 'bg-gray-100 text-gray-500'
+                      }`}>
+                        {balance.netSilver > 0 ? t('netUdhar') : balance.netSilver < 0 ? t('netJama') : t('settled')}
+                      </span>
+                    </div>
+
+                    {/* Specific Udhar / Jama Breakdown */}
+                    <div className="mt-2 pt-1 border-t border-gray-150 flex items-center justify-between text-[8px] sm:text-[9px] text-gray-500 font-semibold gap-1">
+                      <div className="text-left">
+                        <span className="block text-[6.5px] text-gray-400 font-extrabold uppercase">{t('udhar')}</span>
+                        <span className="font-mono text-udhar font-bold">{totalSilverUdhar.toFixed(1)}g</span>
+                      </div>
+                      <div className="text-right">
+                        <span className="block text-[6.5px] text-gray-400 font-extrabold uppercase">{t('jama')}</span>
+                        <span className="font-mono text-jama font-bold">{totalSilverJama.toFixed(1)}g</span>
+                      </div>
+                    </div>
                   </div>
                 )}
 

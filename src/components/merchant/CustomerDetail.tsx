@@ -86,6 +86,18 @@ export const CustomerDetail: React.FC<CustomerDetailProps> = ({
 
   // Balance excludes Rokda entries automatically (handled in calculateCustomerBalance)
   const balance = calculateCustomerBalance(entries);
+  
+  // Calculate specific totals for Udhar and Jama (excludes Rokda entries!)
+  const activeEntriesForTotals = entries.filter(e => !e.isRokda);
+  const totalMoneyUdhar = activeEntriesForTotals.reduce((sum, e) => sum + (e.moneyType === 'udhar' ? e.moneyAmount : 0), 0);
+  const totalMoneyJama = activeEntriesForTotals.reduce((sum, e) => sum + (e.moneyType === 'jama' ? e.moneyAmount : 0), 0);
+
+  const totalGoldUdhar = activeEntriesForTotals.reduce((sum, e) => sum + (e.goldType === 'udhar' ? e.goldWeightGrams : 0), 0);
+  const totalGoldJama = activeEntriesForTotals.reduce((sum, e) => sum + (e.goldType === 'jama' ? e.goldWeightGrams : 0), 0);
+
+  const totalSilverUdhar = activeEntriesForTotals.reduce((sum, e) => sum + (e.silverType === 'udhar' ? e.silverWeightGrams : 0), 0);
+  const totalSilverJama = activeEntriesForTotals.reduce((sum, e) => sum + (e.silverType === 'jama' ? e.silverWeightGrams : 0), 0);
+
   const whatsappUrl = generateWhatsAppShareUrl(customer, merchantTenant, entries);
 
   // Check if historical entries exist for Gold or Silver
@@ -190,54 +202,96 @@ export const CustomerDetail: React.FC<CustomerDetailProps> = ({
         
         {/* Money */}
         <div className="bg-white rounded-xl p-2.5 sm:p-3 md:p-4 border border-gray-200 shadow-2xs text-center flex flex-col justify-between">
-          <span className="text-[10px] md:text-xs font-bold text-gray-500 uppercase">{t('money')}</span>
-          <p className={`text-xs sm:text-sm md:text-lg font-black font-mono my-1 leading-tight ${
-            balance.netMoney > 0 ? 'text-udhar' : balance.netMoney < 0 ? 'text-jama' : 'text-gray-700'
-          }`}>
-            {balance.netMoney > 0
-              ? `₹${Math.round(balance.netMoney).toLocaleString('en-IN')}`
-              : balance.netMoney < 0
-              ? `₹${Math.round(Math.abs(balance.netMoney)).toLocaleString('en-IN')}`
-              : '₹0'}
-          </p>
-          <span className={`text-[9px] md:text-[11px] font-bold px-1 py-0.5 md:py-1 rounded uppercase block ${
-            balance.netMoney > 0 ? 'bg-red-50 text-udhar' : balance.netMoney < 0 ? 'bg-emerald-50 text-jama' : 'bg-gray-100 text-gray-500'
-          }`}>
-            {balance.netMoney > 0 ? t('udhar') : balance.netMoney < 0 ? t('jama') : t('nil')}
-          </span>
+          <div>
+            <span className="text-[10px] md:text-xs font-bold text-gray-500 uppercase">{t('money')}</span>
+            <p className={`text-xs sm:text-sm md:text-lg font-black font-mono my-1 leading-tight ${
+              balance.netMoney > 0 ? 'text-udhar' : balance.netMoney < 0 ? 'text-jama' : 'text-gray-700'
+            }`}>
+              {balance.netMoney > 0
+                ? `₹${Math.round(balance.netMoney).toLocaleString('en-IN')}`
+                : balance.netMoney < 0
+                ? `₹${Math.round(Math.abs(balance.netMoney)).toLocaleString('en-IN')}`
+                : '₹0'}
+            </p>
+            <span className={`text-[9px] md:text-[11px] font-bold px-1 py-0.5 md:py-1 rounded uppercase block ${
+              balance.netMoney > 0 ? 'bg-red-50 text-udhar' : balance.netMoney < 0 ? 'bg-emerald-50 text-jama' : 'bg-gray-100 text-gray-500'
+            }`}>
+              {balance.netMoney > 0 ? t('udhar') : balance.netMoney < 0 ? t('jama') : t('nil')}
+            </span>
+          </div>
+
+          {/* Specific Udhar / Jama Breakdown */}
+          <div className="mt-3 pt-1.5 border-t border-gray-100 flex items-center justify-between text-[8px] sm:text-[9px] md:text-xs text-gray-500 font-semibold gap-1">
+            <div className="text-left">
+              <span className="block text-[7px] md:text-[9px] text-gray-400 font-extrabold uppercase">{t('udhar')}</span>
+              <span className="font-mono text-udhar font-bold">₹{Math.round(totalMoneyUdhar).toLocaleString('en-IN')}</span>
+            </div>
+            <div className="text-right">
+              <span className="block text-[7px] md:text-[9px] text-gray-400 font-extrabold uppercase">{t('jama')}</span>
+              <span className="font-mono text-jama font-bold">₹{Math.round(totalMoneyJama).toLocaleString('en-IN')}</span>
+            </div>
+          </div>
         </div>
 
         {/* Gold */}
         {showGoldCard && (
           <div className="bg-white rounded-xl p-2.5 sm:p-3 md:p-4 border border-amber-200 bg-amber-50/20 shadow-2xs text-center flex flex-col justify-between">
-            <span className="text-[10px] md:text-xs font-bold text-amber-900 uppercase">{t('gold')}</span>
-            <p className={`text-xs sm:text-sm md:text-lg font-black font-mono my-1 leading-tight ${
-              balance.netGold > 0 ? 'text-udhar' : balance.netGold < 0 ? 'text-jama' : 'text-gray-700'
-            }`}>
-              {balance.netGold > 0 ? `${balance.netGold.toFixed(2)}g` : balance.netGold < 0 ? `${Math.abs(balance.netGold).toFixed(2)}g` : '0g'}
-            </p>
-            <span className={`text-[9px] md:text-[11px] font-bold px-1 py-0.5 md:py-1 rounded uppercase block ${
-              balance.netGold > 0 ? 'bg-red-50 text-udhar' : balance.netGold < 0 ? 'bg-emerald-50 text-jama' : 'bg-gray-100 text-gray-500'
-            }`}>
-              {balance.netGold > 0 ? t('udhar') : balance.netGold < 0 ? t('jama') : t('nil')}
-            </span>
+            <div>
+              <span className="text-[10px] md:text-xs font-bold text-amber-900 uppercase">{t('gold')}</span>
+              <p className={`text-xs sm:text-sm md:text-lg font-black font-mono my-1 leading-tight ${
+                balance.netGold > 0 ? 'text-udhar' : balance.netGold < 0 ? 'text-jama' : 'text-gray-700'
+              }`}>
+                {balance.netGold > 0 ? `${balance.netGold.toFixed(2)}g` : balance.netGold < 0 ? `${Math.abs(balance.netGold).toFixed(2)}g` : '0g'}
+              </p>
+              <span className={`text-[9px] md:text-[11px] font-bold px-1 py-0.5 md:py-1 rounded uppercase block ${
+                balance.netGold > 0 ? 'bg-red-50 text-udhar' : balance.netGold < 0 ? 'bg-emerald-50 text-jama' : 'bg-gray-100 text-gray-500'
+              }`}>
+                {balance.netGold > 0 ? t('udhar') : balance.netGold < 0 ? t('jama') : t('nil')}
+              </span>
+            </div>
+
+            {/* Specific Udhar / Jama Breakdown */}
+            <div className="mt-3 pt-1.5 border-t border-gray-100 flex items-center justify-between text-[8px] sm:text-[9px] md:text-xs text-gray-500 font-semibold gap-1">
+              <div className="text-left">
+                <span className="block text-[7px] md:text-[9px] text-gray-400 font-extrabold uppercase">{t('udhar')}</span>
+                <span className="font-mono text-udhar font-bold">{totalGoldUdhar.toFixed(2)}g</span>
+              </div>
+              <div className="text-right">
+                <span className="block text-[7px] md:text-[9px] text-gray-400 font-extrabold uppercase">{t('jama')}</span>
+                <span className="font-mono text-jama font-bold">{totalGoldJama.toFixed(2)}g</span>
+              </div>
+            </div>
           </div>
         )}
 
         {/* Silver */}
         {showSilverCard && (
           <div className="bg-white rounded-xl p-2.5 sm:p-3 md:p-4 border border-slate-200 bg-slate-50/30 shadow-2xs text-center flex flex-col justify-between">
-            <span className="text-[10px] md:text-xs font-bold text-slate-700 uppercase">{t('silver')}</span>
-            <p className={`text-xs sm:text-sm md:text-lg font-black font-mono my-1 leading-tight ${
-              balance.netSilver > 0 ? 'text-udhar' : balance.netSilver < 0 ? 'text-gray-700' : 'text-gray-700'
-            }`}>
-              {balance.netSilver > 0 ? `${balance.netSilver.toFixed(1)}g` : balance.netSilver < 0 ? `${Math.abs(balance.netSilver).toFixed(1)}g` : '0g'}
-            </p>
-            <span className={`text-[9px] md:text-[11px] font-bold px-1 py-0.5 md:py-1 rounded uppercase block ${
-              balance.netSilver > 0 ? 'bg-red-50 text-udhar' : balance.netSilver < 0 ? 'bg-emerald-50 text-jama' : 'bg-gray-100 text-gray-500'
-            }`}>
-              {balance.netSilver > 0 ? t('udhar') : balance.netSilver < 0 ? t('jama') : t('nil')}
-            </span>
+            <div>
+              <span className="text-[10px] md:text-xs font-bold text-slate-700 uppercase">{t('silver')}</span>
+              <p className={`text-xs sm:text-sm md:text-lg font-black font-mono my-1 leading-tight ${
+                balance.netSilver > 0 ? 'text-udhar' : balance.netSilver < 0 ? 'text-gray-700' : 'text-gray-700'
+              }`}>
+                {balance.netSilver > 0 ? `${balance.netSilver.toFixed(1)}g` : balance.netSilver < 0 ? `${Math.abs(balance.netSilver).toFixed(1)}g` : '0g'}
+              </p>
+              <span className={`text-[9px] md:text-[11px] font-bold px-1 py-0.5 md:py-1 rounded uppercase block ${
+                balance.netSilver > 0 ? 'bg-red-50 text-udhar' : balance.netSilver < 0 ? 'bg-emerald-50 text-jama' : 'bg-gray-100 text-gray-500'
+              }`}>
+                {balance.netSilver > 0 ? t('udhar') : balance.netSilver < 0 ? t('jama') : t('nil')}
+              </span>
+            </div>
+
+            {/* Specific Udhar / Jama Breakdown */}
+            <div className="mt-3 pt-1.5 border-t border-gray-100 flex items-center justify-between text-[8px] sm:text-[9px] md:text-xs text-gray-500 font-semibold gap-1">
+              <div className="text-left">
+                <span className="block text-[7px] md:text-[9px] text-gray-400 font-extrabold uppercase">{t('udhar')}</span>
+                <span className="font-mono text-udhar font-bold">{totalSilverUdhar.toFixed(1)}g</span>
+              </div>
+              <div className="text-right">
+                <span className="block text-[7px] md:text-[9px] text-gray-400 font-extrabold uppercase">{t('jama')}</span>
+                <span className="font-mono text-jama font-bold">{totalSilverJama.toFixed(1)}g</span>
+              </div>
+            </div>
           </div>
         )}
       </div>

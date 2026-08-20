@@ -84,9 +84,19 @@ export const MerchantDashboard: React.FC = () => {
     customer.phone.includes(searchQuery)
   );
 
-  // Compute Overall Shop Totals across all customers
   const shopEntries = ledgerEntries.filter(e => e.merchantId === merchantId);
   const shopBalance = calculateCustomerBalance(shopEntries);
+
+  // Calculate shop-wide totals for Udhar and Jama (excludes Rokda entries!)
+  const activeShopEntries = shopEntries.filter(e => !e.isRokda);
+  const shopMoneyUdhar = activeShopEntries.reduce((sum, e) => sum + (e.moneyType === 'udhar' ? e.moneyAmount : 0), 0);
+  const shopMoneyJama = activeShopEntries.reduce((sum, e) => sum + (e.moneyType === 'jama' ? e.moneyAmount : 0), 0);
+
+  const shopGoldUdhar = activeShopEntries.reduce((sum, e) => sum + (e.goldType === 'udhar' ? e.goldWeightGrams : 0), 0);
+  const shopGoldJama = activeShopEntries.reduce((sum, e) => sum + (e.goldType === 'jama' ? e.goldWeightGrams : 0), 0);
+
+  const shopSilverUdhar = activeShopEntries.reduce((sum, e) => sum + (e.silverType === 'udhar' ? e.silverWeightGrams : 0), 0);
+  const shopSilverJama = activeShopEntries.reduce((sum, e) => sum + (e.silverType === 'jama' ? e.silverWeightGrams : 0), 0);
 
   // Check if any customer in shop has non-zero gold or silver balance
   const shopHasGold = shopBalance.netGold !== 0 || shopEntries.some(e => e.goldWeightGrams > 0);
@@ -189,77 +199,119 @@ export const MerchantDashboard: React.FC = () => {
         
         {/* Money Card (Always Enabled) */}
         <div className="bg-white rounded-xl p-2.5 sm:p-3 border border-gray-200 shadow-2xs text-center flex flex-col justify-between">
-          <div className="flex items-center justify-center gap-1 text-[10px] sm:text-xs font-bold text-gray-500 uppercase">
-            <Coins className="w-3 h-3 text-emerald-600 shrink-0" />
-            <span>{t('money')}</span>
-          </div>
-          <div className="my-1">
-            <p className={`text-xs sm:text-sm font-black font-mono leading-tight ${
-              shopBalance.netMoney > 0 ? 'text-udhar' : shopBalance.netMoney < 0 ? 'text-jama' : 'text-gray-700'
+          <div>
+            <div className="flex items-center justify-center gap-1 text-[10px] sm:text-xs font-bold text-gray-500 uppercase">
+              <Coins className="w-3 h-3 text-emerald-600 shrink-0" />
+              <span>{t('money')}</span>
+            </div>
+            <div className="my-1">
+              <p className={`text-xs sm:text-sm font-black font-mono leading-tight ${
+                shopBalance.netMoney > 0 ? 'text-udhar' : shopBalance.netMoney < 0 ? 'text-jama' : 'text-gray-700'
+              }`}>
+                {shopBalance.netMoney > 0
+                  ? `₹${Math.round(shopBalance.netMoney).toLocaleString('en-IN')}`
+                  : shopBalance.netMoney < 0
+                  ? `₹${Math.round(Math.abs(shopBalance.netMoney)).toLocaleString('en-IN')}`
+                  : '₹0'}
+              </p>
+            </div>
+            <span className={`text-[9px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded uppercase inline-block ${
+              shopBalance.netMoney > 0 ? 'bg-red-50 text-udhar' : shopBalance.netMoney < 0 ? 'bg-emerald-50 text-jama' : 'bg-gray-100 text-gray-500'
             }`}>
-              {shopBalance.netMoney > 0
-                ? `₹${Math.round(shopBalance.netMoney).toLocaleString('en-IN')}`
-                : shopBalance.netMoney < 0
-                ? `₹${Math.round(Math.abs(shopBalance.netMoney)).toLocaleString('en-IN')}`
-                : '₹0'}
-            </p>
+              {shopBalance.netMoney > 0 ? t('udhar') : shopBalance.netMoney < 0 ? t('jama') : t('nil')}
+            </span>
           </div>
-          <span className={`text-[9px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded uppercase inline-block ${
-            shopBalance.netMoney > 0 ? 'bg-red-50 text-udhar' : shopBalance.netMoney < 0 ? 'bg-emerald-50 text-jama' : 'bg-gray-100 text-gray-500'
-          }`}>
-            {shopBalance.netMoney > 0 ? t('udhar') : shopBalance.netMoney < 0 ? t('jama') : t('nil')}
-          </span>
+
+          {/* Specific Udhar / Jama Breakdown */}
+          <div className="mt-2.5 pt-1.5 border-t border-gray-100 flex items-center justify-between text-[8px] sm:text-[9px] text-gray-500 font-semibold gap-1">
+            <div className="text-left">
+              <span className="block text-[6.5px] sm:text-[7.5px] text-gray-400 font-extrabold uppercase">{t('udhar')}</span>
+              <span className="font-mono text-udhar font-bold">₹{Math.round(shopMoneyUdhar).toLocaleString('en-IN')}</span>
+            </div>
+            <div className="text-right">
+              <span className="block text-[6.5px] sm:text-[7.5px] text-gray-400 font-extrabold uppercase">{t('jama')}</span>
+              <span className="font-mono text-jama font-bold">₹{Math.round(shopMoneyJama).toLocaleString('en-IN')}</span>
+            </div>
+          </div>
         </div>
 
         {/* Gold Card (Shown if Admin Enabled OR if Shop has Historical Gold Data) */}
         {showShopGoldCard && (
           <div className="bg-white rounded-xl p-2.5 sm:p-3 border border-amber-200 bg-amber-50/20 shadow-2xs text-center flex flex-col justify-between">
-            <div className="flex items-center justify-center gap-1 text-[10px] sm:text-xs font-bold text-amber-900 uppercase">
-              <Sparkles className="w-3 h-3 text-amber-600 shrink-0" />
-              <span>{t('gold')}</span>
-            </div>
-            <div className="my-1">
-              <p className={`text-xs sm:text-sm font-black font-mono leading-tight ${
-                shopBalance.netGold > 0 ? 'text-udhar' : shopBalance.netGold < 0 ? 'text-jama' : 'text-gray-700'
+            <div>
+              <div className="flex items-center justify-center gap-1 text-[10px] sm:text-xs font-bold text-amber-900 uppercase">
+                <Sparkles className="w-3 h-3 text-amber-600 shrink-0" />
+                <span>{t('gold')}</span>
+              </div>
+              <div className="my-1">
+                <p className={`text-xs sm:text-sm font-black font-mono leading-tight ${
+                  shopBalance.netGold > 0 ? 'text-udhar' : shopBalance.netGold < 0 ? 'text-jama' : 'text-gray-700'
+                }`}>
+                  {shopBalance.netGold > 0
+                    ? `${shopBalance.netGold.toFixed(2)}g`
+                    : shopBalance.netGold < 0
+                    ? `${Math.abs(shopBalance.netGold).toFixed(2)}g`
+                    : '0g'}
+                </p>
+              </div>
+              <span className={`text-[9px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded uppercase inline-block ${
+                shopBalance.netGold > 0 ? 'bg-red-50 text-udhar' : shopBalance.netGold < 0 ? 'bg-emerald-50 text-jama' : 'bg-gray-100 text-gray-500'
               }`}>
-                {shopBalance.netGold > 0
-                  ? `${shopBalance.netGold.toFixed(2)}g`
-                  : shopBalance.netGold < 0
-                  ? `${Math.abs(shopBalance.netGold).toFixed(2)}g`
-                  : '0g'}
-              </p>
+                {shopBalance.netGold > 0 ? t('udhar') : shopBalance.netGold < 0 ? t('jama') : t('nil')}
+              </span>
             </div>
-            <span className={`text-[9px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded uppercase inline-block ${
-              shopBalance.netGold > 0 ? 'bg-red-50 text-udhar' : shopBalance.netGold < 0 ? 'bg-emerald-50 text-jama' : 'bg-gray-100 text-gray-500'
-            }`}>
-              {shopBalance.netGold > 0 ? t('udhar') : shopBalance.netGold < 0 ? t('jama') : t('nil')}
-            </span>
+
+            {/* Specific Udhar / Jama Breakdown */}
+            <div className="mt-2.5 pt-1.5 border-t border-gray-100 flex items-center justify-between text-[8px] sm:text-[9px] text-gray-500 font-semibold gap-1">
+              <div className="text-left">
+                <span className="block text-[6.5px] sm:text-[7.5px] text-gray-400 font-extrabold uppercase">{t('udhar')}</span>
+                <span className="font-mono text-udhar font-bold">{shopGoldUdhar.toFixed(2)}g</span>
+              </div>
+              <div className="text-right">
+                <span className="block text-[6.5px] sm:text-[7.5px] text-gray-400 font-extrabold uppercase">{t('jama')}</span>
+                <span className="font-mono text-jama font-bold">{shopGoldJama.toFixed(2)}g</span>
+              </div>
+            </div>
           </div>
         )}
 
         {/* Silver Card (Shown if Admin Enabled OR if Shop has Historical Silver Data) */}
         {showShopSilverCard && (
           <div className="bg-white rounded-xl p-2.5 sm:p-3 border border-slate-200 bg-slate-50/30 shadow-2xs text-center flex flex-col justify-between">
-            <div className="flex items-center justify-center gap-1 text-[10px] sm:text-xs font-bold text-slate-700 uppercase">
-              <Award className="w-3 h-3 text-slate-600 shrink-0" />
-              <span>{t('silver')}</span>
-            </div>
-            <div className="my-1">
-              <p className={`text-xs sm:text-sm font-black font-mono leading-tight ${
-                shopBalance.netSilver > 0 ? 'text-udhar' : shopBalance.netSilver < 0 ? 'text-jama' : 'text-gray-700'
+            <div>
+              <div className="flex items-center justify-center gap-1 text-[10px] sm:text-xs font-bold text-slate-700 uppercase">
+                <Award className="w-3 h-3 text-slate-600 shrink-0" />
+                <span>{t('silver')}</span>
+              </div>
+              <div className="my-1">
+                <p className={`text-xs sm:text-sm font-black font-mono leading-tight ${
+                  shopBalance.netSilver > 0 ? 'text-udhar' : shopBalance.netSilver < 0 ? 'text-jama' : 'text-gray-700'
+                }`}>
+                  {shopBalance.netSilver > 0
+                    ? `${shopBalance.netSilver.toFixed(1)}g`
+                    : shopBalance.netSilver < 0
+                    ? `${Math.abs(shopBalance.netSilver).toFixed(1)}g`
+                    : '0g'}
+                </p>
+              </div>
+              <span className={`text-[9px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded uppercase inline-block ${
+                shopBalance.netSilver > 0 ? 'bg-red-50 text-udhar' : shopBalance.netSilver < 0 ? 'bg-emerald-50 text-jama' : 'bg-gray-100 text-gray-500'
               }`}>
-                {shopBalance.netSilver > 0
-                  ? `${shopBalance.netSilver.toFixed(1)}g`
-                  : shopBalance.netSilver < 0
-                  ? `${Math.abs(shopBalance.netSilver).toFixed(1)}g`
-                  : '0g'}
-              </p>
+                {shopBalance.netSilver > 0 ? t('udhar') : shopBalance.netSilver < 0 ? t('jama') : t('nil')}
+              </span>
             </div>
-            <span className={`text-[9px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded uppercase inline-block ${
-              shopBalance.netSilver > 0 ? 'bg-red-50 text-udhar' : shopBalance.netSilver < 0 ? 'bg-emerald-50 text-jama' : 'bg-gray-100 text-gray-500'
-            }`}>
-              {shopBalance.netSilver > 0 ? t('udhar') : shopBalance.netSilver < 0 ? t('jama') : t('nil')}
-            </span>
+
+            {/* Specific Udhar / Jama Breakdown */}
+            <div className="mt-2.5 pt-1.5 border-t border-gray-100 flex items-center justify-between text-[8px] sm:text-[9px] text-gray-500 font-semibold gap-1">
+              <div className="text-left">
+                <span className="block text-[6.5px] sm:text-[7.5px] text-gray-400 font-extrabold uppercase">{t('udhar')}</span>
+                <span className="font-mono text-udhar font-bold">{shopSilverUdhar.toFixed(1)}g</span>
+              </div>
+              <div className="text-right">
+                <span className="block text-[6.5px] sm:text-[7.5px] text-gray-400 font-extrabold uppercase">{t('jama')}</span>
+                <span className="font-mono text-jama font-bold">{shopSilverJama.toFixed(1)}g</span>
+              </div>
+            </div>
           </div>
         )}
 
