@@ -201,10 +201,10 @@ export const CustomerDetail: React.FC<CustomerDetailProps> = ({
       <div className={`grid ${gridClass} gap-2`}>
         
         {/* Money */}
-        <div className="bg-white rounded-xl p-2.5 sm:p-3 md:p-4 border border-gray-200 shadow-2xs text-center flex flex-col justify-between">
+        <div className="bg-white rounded-xl p-3 sm:p-4 border border-gray-200 shadow-2xs text-center flex flex-col justify-between">
           <div>
-            <span className="text-[10px] md:text-xs font-bold text-gray-500 uppercase">{t('money')}</span>
-            <p className={`text-xs sm:text-sm md:text-lg font-black font-mono my-1 leading-tight ${
+            <span className="text-xs sm:text-sm font-bold text-gray-500 uppercase">{t('money')}</span>
+            <p className={`text-lg sm:text-xl md:text-2xl font-black font-mono my-1 leading-tight ${
               balance.netMoney > 0 ? 'text-udhar' : balance.netMoney < 0 ? 'text-jama' : 'text-gray-700'
             }`}>
               {balance.netMoney > 0
@@ -213,7 +213,7 @@ export const CustomerDetail: React.FC<CustomerDetailProps> = ({
                 ? `₹${Math.round(Math.abs(balance.netMoney)).toLocaleString('en-IN')}`
                 : '₹0'}
             </p>
-            <span className={`text-[9px] md:text-[11px] font-bold px-1 py-0.5 md:py-1 rounded uppercase block ${
+            <span className={`text-xs sm:text-sm font-extrabold px-2 py-0.5 rounded uppercase inline-block ${
               balance.netMoney > 0 ? 'bg-red-50 text-udhar' : balance.netMoney < 0 ? 'bg-emerald-50 text-jama' : 'bg-gray-100 text-gray-500'
             }`}>
               {balance.netMoney > 0 ? t('udhar') : balance.netMoney < 0 ? t('jama') : t('nil')}
@@ -221,7 +221,7 @@ export const CustomerDetail: React.FC<CustomerDetailProps> = ({
           </div>
 
           {/* Specific Udhar / Jama Breakdown */}
-          <div className="mt-2 text-xs sm:text-sm font-bold text-gray-600 flex items-center justify-center gap-1.5 border-t border-gray-100 pt-1 leading-tight shrink-0">
+          <div className="mt-3 text-xs sm:text-sm md:text-base font-extrabold text-gray-700 flex items-center justify-center gap-1.5 border-t border-gray-100 pt-1.5 leading-tight shrink-0">
             <span className="text-udhar">{t('udhar')}: <span className="font-mono">₹{Math.round(totalMoneyUdhar).toLocaleString('en-IN')}</span></span>
             <span className="text-gray-300">•</span>
             <span className="text-jama">{t('jama')}: <span className="font-mono">₹{Math.round(totalMoneyJama).toLocaleString('en-IN')}</span></span>
@@ -230,15 +230,15 @@ export const CustomerDetail: React.FC<CustomerDetailProps> = ({
 
         {/* Gold */}
         {showGoldCard && (
-          <div className="bg-white rounded-xl p-2.5 sm:p-3 md:p-4 border border-amber-200 bg-amber-50/20 shadow-2xs text-center flex flex-col justify-between">
+          <div className="bg-white rounded-xl p-3 sm:p-4 border border-amber-200 bg-amber-50/20 shadow-2xs text-center flex flex-col justify-between">
             <div>
-              <span className="text-[10px] md:text-xs font-bold text-amber-900 uppercase">{t('gold')}</span>
-              <p className={`text-xs sm:text-sm md:text-lg font-black font-mono my-1 leading-tight ${
+              <span className="text-xs sm:text-sm font-bold text-amber-900 uppercase">{t('gold')}</span>
+              <p className={`text-lg sm:text-xl md:text-2xl font-black font-mono my-1 leading-tight ${
                 balance.netGold > 0 ? 'text-udhar' : balance.netGold < 0 ? 'text-jama' : 'text-gray-700'
               }`}>
                 {balance.netGold > 0 ? `${balance.netGold.toFixed(2)}g` : balance.netGold < 0 ? `${Math.abs(balance.netGold).toFixed(2)}g` : '0g'}
               </p>
-              <span className={`text-[9px] md:text-[11px] font-bold px-1 py-0.5 md:py-1 rounded uppercase block ${
+              <span className={`text-xs sm:text-sm font-extrabold px-2 py-0.5 rounded uppercase inline-block ${
                 balance.netGold > 0 ? 'bg-red-50 text-udhar' : balance.netGold < 0 ? 'bg-emerald-50 text-jama' : 'bg-gray-100 text-gray-500'
               }`}>
                 {balance.netGold > 0 ? t('udhar') : balance.netGold < 0 ? t('jama') : t('nil')}
@@ -246,7 +246,7 @@ export const CustomerDetail: React.FC<CustomerDetailProps> = ({
             </div>
 
             {/* Specific Udhar / Jama Breakdown */}
-            <div className="mt-2 text-xs sm:text-sm font-bold text-gray-600 flex items-center justify-center gap-1.5 border-t border-gray-100 pt-1 leading-tight shrink-0">
+            <div className="mt-3 text-xs sm:text-sm md:text-base font-extrabold text-gray-700 flex items-center justify-center gap-1.5 border-t border-gray-100 pt-1.5 leading-tight shrink-0">
               <span className="text-udhar">{t('udhar')}: <span className="font-mono">{totalGoldUdhar.toFixed(2)}g</span></span>
               <span className="text-gray-300">•</span>
               <span className="text-jama">{t('jama')}: <span className="font-mono">{totalGoldJama.toFixed(2)}g</span></span>
@@ -256,15 +256,15 @@ export const CustomerDetail: React.FC<CustomerDetailProps> = ({
 
         {/* Silver */}
         {showSilverCard && (
-          <div className="bg-white rounded-xl p-2.5 sm:p-3 md:p-4 border border-slate-200 bg-slate-50/30 shadow-2xs text-center flex flex-col justify-between">
+          <div className="bg-white rounded-xl p-3 sm:p-4 border border-slate-200 bg-slate-50/30 shadow-2xs text-center flex flex-col justify-between">
             <div>
-              <span className="text-[10px] md:text-xs font-bold text-slate-700 uppercase">{t('silver')}</span>
-              <p className={`text-xs sm:text-sm md:text-lg font-black font-mono my-1 leading-tight ${
+              <span className="text-xs sm:text-sm font-bold text-slate-700 uppercase">{t('silver')}</span>
+              <p className={`text-lg sm:text-xl md:text-2xl font-black font-mono my-1 leading-tight ${
                 balance.netSilver > 0 ? 'text-udhar' : balance.netSilver < 0 ? 'text-gray-700' : 'text-gray-700'
               }`}>
                 {balance.netSilver > 0 ? `${balance.netSilver.toFixed(1)}g` : balance.netSilver < 0 ? `${Math.abs(balance.netSilver).toFixed(1)}g` : '0g'}
               </p>
-              <span className={`text-[9px] md:text-[11px] font-bold px-1 py-0.5 md:py-1 rounded uppercase block ${
+              <span className={`text-xs sm:text-sm font-extrabold px-2 py-0.5 rounded uppercase inline-block ${
                 balance.netSilver > 0 ? 'bg-red-50 text-udhar' : balance.netSilver < 0 ? 'bg-emerald-50 text-jama' : 'bg-gray-100 text-gray-500'
               }`}>
                 {balance.netSilver > 0 ? t('udhar') : balance.netSilver < 0 ? t('jama') : t('nil')}
@@ -272,7 +272,7 @@ export const CustomerDetail: React.FC<CustomerDetailProps> = ({
             </div>
 
             {/* Specific Udhar / Jama Breakdown */}
-            <div className="mt-2 text-xs sm:text-sm font-bold text-gray-600 flex items-center justify-center gap-1.5 border-t border-gray-100 pt-1 leading-tight shrink-0">
+            <div className="mt-3 text-xs sm:text-sm md:text-base font-extrabold text-gray-700 flex items-center justify-center gap-1.5 border-t border-gray-100 pt-1.5 leading-tight shrink-0">
               <span className="text-udhar">{t('udhar')}: <span className="font-mono">{totalSilverUdhar.toFixed(1)}g</span></span>
               <span className="text-gray-300">•</span>
               <span className="text-jama">{t('jama')}: <span className="font-mono">{totalSilverJama.toFixed(1)}g</span></span>

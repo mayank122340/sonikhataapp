@@ -198,14 +198,14 @@ export const MerchantDashboard: React.FC = () => {
       <div className={`grid ${gridClass} gap-2`}>
         
         {/* Money Card (Always Enabled) */}
-        <div className="bg-white rounded-xl p-2.5 sm:p-3 border border-gray-200 shadow-2xs text-center flex flex-col justify-between">
+        <div className="bg-white rounded-xl p-3 sm:p-4 border border-gray-200 shadow-2xs text-center flex flex-col justify-between">
           <div>
-            <div className="flex items-center justify-center gap-1 text-[10px] sm:text-xs font-bold text-gray-500 uppercase">
-              <Coins className="w-3 h-3 text-emerald-600 shrink-0" />
+            <div className="flex items-center justify-center gap-1 text-xs sm:text-sm font-bold text-gray-500 uppercase">
+              <Coins className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
               <span>{t('money')}</span>
             </div>
-            <div className="my-1">
-              <p className={`text-xs sm:text-sm font-black font-mono leading-tight ${
+            <div className="my-1.5">
+              <p className={`text-lg sm:text-xl md:text-2xl font-black font-mono leading-tight ${
                 shopBalance.netMoney > 0 ? 'text-udhar' : shopBalance.netMoney < 0 ? 'text-jama' : 'text-gray-700'
               }`}>
                 {shopBalance.netMoney > 0
@@ -215,7 +215,7 @@ export const MerchantDashboard: React.FC = () => {
                   : '₹0'}
               </p>
             </div>
-            <span className={`text-[9px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded uppercase inline-block ${
+            <span className={`text-xs sm:text-sm font-extrabold px-2 py-0.5 rounded uppercase inline-block ${
               shopBalance.netMoney > 0 ? 'bg-red-50 text-udhar' : shopBalance.netMoney < 0 ? 'bg-emerald-50 text-jama' : 'bg-gray-100 text-gray-500'
             }`}>
               {shopBalance.netMoney > 0 ? t('udhar') : shopBalance.netMoney < 0 ? t('jama') : t('nil')}
@@ -223,7 +223,7 @@ export const MerchantDashboard: React.FC = () => {
           </div>
 
           {/* Specific Udhar / Jama Breakdown */}
-          <div className="mt-2 text-xs sm:text-sm font-bold text-gray-600 flex items-center justify-center gap-1.5 border-t border-gray-100 pt-1 leading-tight shrink-0">
+          <div className="mt-3 text-xs sm:text-sm md:text-base font-extrabold text-gray-700 flex items-center justify-center gap-1.5 border-t border-gray-100 pt-1.5 leading-tight shrink-0">
             <span className="text-udhar">{t('udhar')}: <span className="font-mono">₹{Math.round(shopMoneyUdhar).toLocaleString('en-IN')}</span></span>
             <span className="text-gray-300">•</span>
             <span className="text-jama">{t('jama')}: <span className="font-mono">₹{Math.round(shopMoneyJama).toLocaleString('en-IN')}</span></span>
@@ -232,14 +232,14 @@ export const MerchantDashboard: React.FC = () => {
 
         {/* Gold Card (Shown if Admin Enabled OR if Shop has Historical Gold Data) */}
         {showShopGoldCard && (
-          <div className="bg-white rounded-xl p-2.5 sm:p-3 border border-amber-200 bg-amber-50/20 shadow-2xs text-center flex flex-col justify-between">
+          <div className="bg-white rounded-xl p-3 sm:p-4 border border-amber-200 bg-amber-50/20 shadow-2xs text-center flex flex-col justify-between">
             <div>
-              <div className="flex items-center justify-center gap-1 text-[10px] sm:text-xs font-bold text-amber-900 uppercase">
-                <Sparkles className="w-3 h-3 text-amber-600 shrink-0" />
+              <div className="flex items-center justify-center gap-1 text-xs sm:text-sm font-bold text-amber-900 uppercase">
+                <Sparkles className="w-3.5 h-3.5 text-amber-600 shrink-0" />
                 <span>{t('gold')}</span>
               </div>
-              <div className="my-1">
-                <p className={`text-xs sm:text-sm font-black font-mono leading-tight ${
+              <div className="my-1.5">
+                <p className={`text-lg sm:text-xl md:text-2xl font-black font-mono leading-tight ${
                   shopBalance.netGold > 0 ? 'text-udhar' : shopBalance.netGold < 0 ? 'text-jama' : 'text-gray-700'
                 }`}>
                   {shopBalance.netGold > 0
@@ -249,7 +249,7 @@ export const MerchantDashboard: React.FC = () => {
                     : '0g'}
                 </p>
               </div>
-              <span className={`text-[9px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded uppercase inline-block ${
+              <span className={`text-xs sm:text-sm font-extrabold px-2 py-0.5 rounded uppercase inline-block ${
                 shopBalance.netGold > 0 ? 'bg-red-50 text-udhar' : shopBalance.netGold < 0 ? 'bg-emerald-50 text-jama' : 'bg-gray-100 text-gray-500'
               }`}>
                 {shopBalance.netGold > 0 ? t('udhar') : shopBalance.netGold < 0 ? t('jama') : t('nil')}
@@ -257,7 +257,7 @@ export const MerchantDashboard: React.FC = () => {
             </div>
 
             {/* Specific Udhar / Jama Breakdown */}
-            <div className="mt-2 text-xs sm:text-sm font-bold text-gray-600 flex items-center justify-center gap-1.5 border-t border-gray-100 pt-1 leading-tight shrink-0">
+            <div className="mt-3 text-xs sm:text-sm md:text-base font-extrabold text-gray-700 flex items-center justify-center gap-1.5 border-t border-gray-100 pt-1.5 leading-tight shrink-0">
               <span className="text-udhar">{t('udhar')}: <span className="font-mono">{shopGoldUdhar.toFixed(2)}g</span></span>
               <span className="text-gray-300">•</span>
               <span className="text-jama">{t('jama')}: <span className="font-mono">{shopGoldJama.toFixed(2)}g</span></span>
@@ -267,14 +267,14 @@ export const MerchantDashboard: React.FC = () => {
 
         {/* Silver Card (Shown if Admin Enabled OR if Shop has Historical Silver Data) */}
         {showShopSilverCard && (
-          <div className="bg-white rounded-xl p-2.5 sm:p-3 border border-slate-200 bg-slate-50/30 shadow-2xs text-center flex flex-col justify-between">
+          <div className="bg-white rounded-xl p-3 sm:p-4 border border-slate-200 bg-slate-50/30 shadow-2xs text-center flex flex-col justify-between">
             <div>
-              <div className="flex items-center justify-center gap-1 text-[10px] sm:text-xs font-bold text-slate-700 uppercase">
-                <Award className="w-3 h-3 text-slate-600 shrink-0" />
+              <div className="flex items-center justify-center gap-1 text-xs sm:text-sm font-bold text-slate-700 uppercase">
+                <Award className="w-3.5 h-3.5 text-slate-600 shrink-0" />
                 <span>{t('silver')}</span>
               </div>
-              <div className="my-1">
-                <p className={`text-xs sm:text-sm font-black font-mono leading-tight ${
+              <div className="my-1.5">
+                <p className={`text-lg sm:text-xl md:text-2xl font-black font-mono leading-tight ${
                   shopBalance.netSilver > 0 ? 'text-udhar' : shopBalance.netSilver < 0 ? 'text-jama' : 'text-gray-700'
                 }`}>
                   {shopBalance.netSilver > 0
@@ -284,7 +284,7 @@ export const MerchantDashboard: React.FC = () => {
                     : '0g'}
                 </p>
               </div>
-              <span className={`text-[9px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded uppercase inline-block ${
+              <span className={`text-xs sm:text-sm font-extrabold px-2 py-0.5 rounded uppercase inline-block ${
                 shopBalance.netSilver > 0 ? 'bg-red-50 text-udhar' : shopBalance.netSilver < 0 ? 'bg-emerald-50 text-jama' : 'bg-gray-100 text-gray-500'
               }`}>
                 {shopBalance.netSilver > 0 ? t('udhar') : shopBalance.netSilver < 0 ? t('jama') : t('nil')}
@@ -292,7 +292,7 @@ export const MerchantDashboard: React.FC = () => {
             </div>
 
             {/* Specific Udhar / Jama Breakdown */}
-            <div className="mt-2 text-xs sm:text-sm font-bold text-gray-600 flex items-center justify-center gap-1.5 border-t border-gray-100 pt-1 leading-tight shrink-0">
+            <div className="mt-3 text-xs sm:text-sm md:text-base font-extrabold text-gray-700 flex items-center justify-center gap-1.5 border-t border-gray-100 pt-1.5 leading-tight shrink-0">
               <span className="text-udhar">{t('udhar')}: <span className="font-mono">{shopSilverUdhar.toFixed(1)}g</span></span>
               <span className="text-gray-300">•</span>
               <span className="text-jama">{t('jama')}: <span className="font-mono">{shopSilverJama.toFixed(1)}g</span></span>
