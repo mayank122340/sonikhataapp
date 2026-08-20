@@ -223,7 +223,7 @@ export const MerchantDashboard: React.FC = () => {
           </div>
 
           {/* Specific Udhar / Jama Breakdown */}
-          <div className="mt-2 text-[9px] sm:text-[10px] font-bold text-gray-500 flex items-center justify-center gap-1.5 border-t border-gray-100 pt-1 leading-tight shrink-0">
+          <div className="mt-2 text-xs sm:text-sm font-bold text-gray-600 flex items-center justify-center gap-1.5 border-t border-gray-100 pt-1 leading-tight shrink-0">
             <span className="text-udhar">{t('udhar')}: <span className="font-mono">₹{Math.round(shopMoneyUdhar).toLocaleString('en-IN')}</span></span>
             <span className="text-gray-300">•</span>
             <span className="text-jama">{t('jama')}: <span className="font-mono">₹{Math.round(shopMoneyJama).toLocaleString('en-IN')}</span></span>
@@ -257,7 +257,7 @@ export const MerchantDashboard: React.FC = () => {
             </div>
 
             {/* Specific Udhar / Jama Breakdown */}
-            <div className="mt-2 text-[9px] sm:text-[10px] font-bold text-gray-500 flex items-center justify-center gap-1.5 border-t border-gray-100 pt-1 leading-tight shrink-0">
+            <div className="mt-2 text-xs sm:text-sm font-bold text-gray-600 flex items-center justify-center gap-1.5 border-t border-gray-100 pt-1 leading-tight shrink-0">
               <span className="text-udhar">{t('udhar')}: <span className="font-mono">{shopGoldUdhar.toFixed(2)}g</span></span>
               <span className="text-gray-300">•</span>
               <span className="text-jama">{t('jama')}: <span className="font-mono">{shopGoldJama.toFixed(2)}g</span></span>
@@ -292,7 +292,7 @@ export const MerchantDashboard: React.FC = () => {
             </div>
 
             {/* Specific Udhar / Jama Breakdown */}
-            <div className="mt-2 text-[9px] sm:text-[10px] font-bold text-gray-500 flex items-center justify-center gap-1.5 border-t border-gray-100 pt-1 leading-tight shrink-0">
+            <div className="mt-2 text-xs sm:text-sm font-bold text-gray-600 flex items-center justify-center gap-1.5 border-t border-gray-100 pt-1 leading-tight shrink-0">
               <span className="text-udhar">{t('udhar')}: <span className="font-mono">{shopSilverUdhar.toFixed(1)}g</span></span>
               <span className="text-gray-300">•</span>
               <span className="text-jama">{t('jama')}: <span className="font-mono">{shopSilverJama.toFixed(1)}g</span></span>
