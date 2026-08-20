@@ -358,15 +358,10 @@ export const BillGeneratorModal: React.FC<BillGeneratorModalProps> = ({
                   </div>
 
                   {/* Specific Udhar / Jama Breakdown */}
-                  <div className="mt-2 pt-1 border-t border-gray-150 flex items-center justify-between text-[8px] sm:text-[9px] text-gray-500 font-semibold gap-1">
-                    <div className="text-left">
-                      <span className="block text-[6.5px] text-gray-400 font-extrabold uppercase">{t('udhar')}</span>
-                      <span className="font-mono text-udhar font-bold">₹{Math.round(totalMoneyUdhar).toLocaleString('en-IN')}</span>
-                    </div>
-                    <div className="text-right">
-                      <span className="block text-[6.5px] text-gray-400 font-extrabold uppercase">{t('jama')}</span>
-                      <span className="font-mono text-jama font-bold">₹{Math.round(totalMoneyJama).toLocaleString('en-IN')}</span>
-                    </div>
+                  <div className="mt-2 text-[8px] sm:text-[9.5px] font-bold text-gray-500 flex items-center justify-center gap-1.5 border-t border-gray-100 pt-1 leading-tight shrink-0">
+                    <span className="text-udhar">{t('udhar')}: <span className="font-mono">₹{Math.round(totalMoneyUdhar).toLocaleString('en-IN')}</span></span>
+                    <span className="text-gray-300">•</span>
+                    <span className="text-jama">{t('jama')}: <span className="font-mono">₹{Math.round(totalMoneyJama).toLocaleString('en-IN')}</span></span>
                   </div>
                 </div>
 
@@ -394,15 +389,10 @@ export const BillGeneratorModal: React.FC<BillGeneratorModalProps> = ({
                     </div>
 
                     {/* Specific Udhar / Jama Breakdown */}
-                    <div className="mt-2 pt-1 border-t border-gray-150 flex items-center justify-between text-[8px] sm:text-[9px] text-gray-500 font-semibold gap-1">
-                      <div className="text-left">
-                        <span className="block text-[6.5px] text-gray-400 font-extrabold uppercase">{t('udhar')}</span>
-                        <span className="font-mono text-udhar font-bold">{totalGoldUdhar.toFixed(2)}g</span>
-                      </div>
-                      <div className="text-right">
-                        <span className="block text-[6.5px] text-gray-400 font-extrabold uppercase">{t('jama')}</span>
-                        <span className="font-mono text-jama font-bold">{totalGoldJama.toFixed(2)}g</span>
-                      </div>
+                    <div className="mt-2 text-[8px] sm:text-[9.5px] font-bold text-gray-500 flex items-center justify-center gap-1.5 border-t border-gray-100 pt-1 leading-tight shrink-0">
+                      <span className="text-udhar">{t('udhar')}: <span className="font-mono">{totalGoldUdhar.toFixed(2)}g</span></span>
+                      <span className="text-gray-300">•</span>
+                      <span className="text-jama">{t('jama')}: <span className="font-mono">{totalGoldJama.toFixed(2)}g</span></span>
                     </div>
                   </div>
                 )}
@@ -431,15 +421,10 @@ export const BillGeneratorModal: React.FC<BillGeneratorModalProps> = ({
                     </div>
 
                     {/* Specific Udhar / Jama Breakdown */}
-                    <div className="mt-2 pt-1 border-t border-gray-150 flex items-center justify-between text-[8px] sm:text-[9px] text-gray-500 font-semibold gap-1">
-                      <div className="text-left">
-                        <span className="block text-[6.5px] text-gray-400 font-extrabold uppercase">{t('udhar')}</span>
-                        <span className="font-mono text-udhar font-bold">{totalSilverUdhar.toFixed(1)}g</span>
-                      </div>
-                      <div className="text-right">
-                        <span className="block text-[6.5px] text-gray-400 font-extrabold uppercase">{t('jama')}</span>
-                        <span className="font-mono text-jama font-bold">{totalSilverJama.toFixed(1)}g</span>
-                      </div>
+                    <div className="mt-2 text-[8px] sm:text-[9.5px] font-bold text-gray-500 flex items-center justify-center gap-1.5 border-t border-gray-100 pt-1 leading-tight shrink-0">
+                      <span className="text-udhar">{t('udhar')}: <span className="font-mono">{totalSilverUdhar.toFixed(1)}g</span></span>
+                      <span className="text-gray-300">•</span>
+                      <span className="text-jama">{t('jama')}: <span className="font-mono">{totalSilverJama.toFixed(1)}g</span></span>
                     </div>
                   </div>
                 )}

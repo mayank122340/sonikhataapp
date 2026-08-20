@@ -223,15 +223,10 @@ export const MerchantDashboard: React.FC = () => {
           </div>
 
           {/* Specific Udhar / Jama Breakdown */}
-          <div className="mt-2.5 pt-1.5 border-t border-gray-100 flex items-center justify-between text-[8px] sm:text-[9px] text-gray-500 font-semibold gap-1">
-            <div className="text-left">
-              <span className="block text-[6.5px] sm:text-[7.5px] text-gray-400 font-extrabold uppercase">{t('udhar')}</span>
-              <span className="font-mono text-udhar font-bold">₹{Math.round(shopMoneyUdhar).toLocaleString('en-IN')}</span>
-            </div>
-            <div className="text-right">
-              <span className="block text-[6.5px] sm:text-[7.5px] text-gray-400 font-extrabold uppercase">{t('jama')}</span>
-              <span className="font-mono text-jama font-bold">₹{Math.round(shopMoneyJama).toLocaleString('en-IN')}</span>
-            </div>
+          <div className="mt-2 text-[9px] sm:text-[10px] font-bold text-gray-500 flex items-center justify-center gap-1.5 border-t border-gray-100 pt-1 leading-tight shrink-0">
+            <span className="text-udhar">{t('udhar')}: <span className="font-mono">₹{Math.round(shopMoneyUdhar).toLocaleString('en-IN')}</span></span>
+            <span className="text-gray-300">•</span>
+            <span className="text-jama">{t('jama')}: <span className="font-mono">₹{Math.round(shopMoneyJama).toLocaleString('en-IN')}</span></span>
           </div>
         </div>
 
@@ -262,15 +257,10 @@ export const MerchantDashboard: React.FC = () => {
             </div>
 
             {/* Specific Udhar / Jama Breakdown */}
-            <div className="mt-2.5 pt-1.5 border-t border-gray-100 flex items-center justify-between text-[8px] sm:text-[9px] text-gray-500 font-semibold gap-1">
-              <div className="text-left">
-                <span className="block text-[6.5px] sm:text-[7.5px] text-gray-400 font-extrabold uppercase">{t('udhar')}</span>
-                <span className="font-mono text-udhar font-bold">{shopGoldUdhar.toFixed(2)}g</span>
-              </div>
-              <div className="text-right">
-                <span className="block text-[6.5px] sm:text-[7.5px] text-gray-400 font-extrabold uppercase">{t('jama')}</span>
-                <span className="font-mono text-jama font-bold">{shopGoldJama.toFixed(2)}g</span>
-              </div>
+            <div className="mt-2 text-[9px] sm:text-[10px] font-bold text-gray-500 flex items-center justify-center gap-1.5 border-t border-gray-100 pt-1 leading-tight shrink-0">
+              <span className="text-udhar">{t('udhar')}: <span className="font-mono">{shopGoldUdhar.toFixed(2)}g</span></span>
+              <span className="text-gray-300">•</span>
+              <span className="text-jama">{t('jama')}: <span className="font-mono">{shopGoldJama.toFixed(2)}g</span></span>
             </div>
           </div>
         )}
@@ -302,15 +292,10 @@ export const MerchantDashboard: React.FC = () => {
             </div>
 
             {/* Specific Udhar / Jama Breakdown */}
-            <div className="mt-2.5 pt-1.5 border-t border-gray-100 flex items-center justify-between text-[8px] sm:text-[9px] text-gray-500 font-semibold gap-1">
-              <div className="text-left">
-                <span className="block text-[6.5px] sm:text-[7.5px] text-gray-400 font-extrabold uppercase">{t('udhar')}</span>
-                <span className="font-mono text-udhar font-bold">{shopSilverUdhar.toFixed(1)}g</span>
-              </div>
-              <div className="text-right">
-                <span className="block text-[6.5px] sm:text-[7.5px] text-gray-400 font-extrabold uppercase">{t('jama')}</span>
-                <span className="font-mono text-jama font-bold">{shopSilverJama.toFixed(1)}g</span>
-              </div>
+            <div className="mt-2 text-[9px] sm:text-[10px] font-bold text-gray-500 flex items-center justify-center gap-1.5 border-t border-gray-100 pt-1 leading-tight shrink-0">
+              <span className="text-udhar">{t('udhar')}: <span className="font-mono">{shopSilverUdhar.toFixed(1)}g</span></span>
+              <span className="text-gray-300">•</span>
+              <span className="text-jama">{t('jama')}: <span className="font-mono">{shopSilverJama.toFixed(1)}g</span></span>
             </div>
           </div>
         )}
