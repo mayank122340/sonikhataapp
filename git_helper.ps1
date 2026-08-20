@@ -11,13 +11,18 @@ if (-not (Test-Path -Path ".git")) {
 & $git config user.name "mayank122340"
 & $git config user.email "mayank122340@example.com"
 
+# Remove cached node_modules and dist if they were tracked
+Write-Output "Removing node_modules and dist from GitHub tracking (cleaning up registry)..."
+& $git rm -r --cached node_modules
+& $git rm -r --cached dist
+
 # Git operations
 Write-Output "Staging files..."
 & $git add .
 
 Write-Output "Committing changes..."
-& $git commit -m "Update PWA branding and tablet responsive optimizations"
+& $git commit -m "Clean repo: remove node_modules and dist, apply gitignore"
 
-Write-Output "Pushing to GitHub..."
+Write-Output "Pushing clean version to GitHub..."
 & $git branch -M main
 & $git push -u origin main
