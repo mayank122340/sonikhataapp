@@ -11,9 +11,15 @@
 
 /* Custom Print Styles for Invoice Generation */
 @media print {
+  #root {
+    display: none !important;
+  }
+
   body {
     background: white !important;
-    color: black !important;
+    color: #111827 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
   
   header, footer, nav, button, .print\:hidden {
@@ -26,6 +32,44 @@
     width: 100% !important;
     box-shadow: none !important;
     border: none !important;
+  }
+
+  /* Prevent page-breaks in critical document blocks */
+  tr, 
+  .bg-amber-50\/70,
+  .pt-3.border-t {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* Force table headers to be visible with text colors even when background graphics is off */
+  th {
+    background-color: #f3f4f6 !important;
+    color: #111827 !important;
+    border-bottom: 2px solid #9ca3af !important;
+    font-weight: 800 !important;
+  }
+
+  tr {
+    border-bottom: 1px solid #e5e7eb !important;
+  }
+
+  /* Ensure text remains dark and high contrast on paper */
+  span, p, h1, h2, h3, h4, h5, td {
+    color: #111827 !important;
+  }
+
+  /* Keep positive/negative balance indicators recognizable even in monochrome */
+  .text-udhar {
+    color: #b91c1c !important; /* Rich Dark Red for print */
+  }
+  .text-jama {
+    color: #047857 !important; /* Rich Dark Green for print */
+  }
+
+  @page {
+    size: A4;
+    margin: 12mm 10mm 12mm 10mm;
   }
 }
 

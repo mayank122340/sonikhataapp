@@ -35,9 +35,6 @@ export const BillGeneratorModal: React.FC<BillGeneratorModalProps> = ({
   const { t } = useLanguage();
   const [isGenerating, setIsGenerating] = useState(false);
 
-  // Filter State for Bulk Entries (All / Last 15 / Last 30)
-  const [billFilter, setBillFilter] = useState<'all' | '15' | '30'>('all');
-
   if (!isOpen) return null;
 
   // Asset Toggles set by Admin
@@ -56,12 +53,7 @@ export const BillGeneratorModal: React.FC<BillGeneratorModalProps> = ({
     return getTimestamp(b) - getTimestamp(a);
   });
 
-  // Apply Bill Entry Limit Filter
-  const displayEntries = billFilter === '15' 
-    ? sortedEntries.slice(0, 15) 
-    : billFilter === '30' 
-    ? sortedEntries.slice(0, 30) 
-    : sortedEntries;
+  const displayEntries = sortedEntries;
 
   // Check if historical entries have gold or silver data
   const hasHistoricalGold = sortedEntries.some(e => e.goldWeightGrams > 0);
@@ -133,44 +125,6 @@ export const BillGeneratorModal: React.FC<BillGeneratorModalProps> = ({
           </div>
 
         </div>
-
-        {/* Filter Controls for Bulk Entries */}
-        <div className="flex items-center justify-between bg-gray-800/80 px-2.5 py-1.5 rounded-lg border border-gray-700 text-xs">
-          <span className="text-gray-300 font-medium flex items-center gap-1">
-            <Filter className="w-3.5 h-3.5 text-gold-400" /> {t('billScope')}:
-          </span>
-
-          <div className="flex bg-gray-900 p-0.5 rounded-md text-[10px] font-bold">
-            <button
-              type="button"
-              onClick={() => setBillFilter('15')}
-              className={`px-2 py-0.5 rounded transition-all ${
-                billFilter === '15' ? 'bg-gold-500 text-white' : 'text-gray-400'
-              }`}
-            >
-              {t('last15')}
-            </button>
-            <button
-              type="button"
-              onClick={() => setBillFilter('30')}
-              className={`px-2 py-0.5 rounded transition-all ${
-                billFilter === '30' ? 'bg-gold-500 text-white' : 'text-gray-400'
-              }`}
-            >
-              {t('last30')}
-            </button>
-            <button
-              type="button"
-              onClick={() => setBillFilter('all')}
-              className={`px-2 py-0.5 rounded transition-all ${
-                billFilter === 'all' ? 'bg-gold-500 text-white' : 'text-gray-400'
-              }`}
-            >
-              {t('all')} ({sortedEntries.length})
-            </button>
-          </div>
-        </div>
-
       </div>
 
       {/* 2. ELEGANT LINE-BY-LINE TAX INVOICE TABLE DOCUMENT */}
