@@ -210,9 +210,11 @@ export const BillGeneratorModal: React.FC<BillGeneratorModalProps> = ({
                     {merchantTenant.shopName}
                   </h1>
                   
-                  <p className="text-[11px] text-amber-900 font-bold leading-tight break-words mt-0.5">
-                    {merchantTenant.billHeaderNotes || 'Certified 22K/18K Hallmarked Gold & Pure 925 Silver Ornaments'}
-                  </p>
+                  {merchantTenant.billHeaderNotes && merchantTenant.billHeaderNotes.trim() && (
+                    <p className="text-[11px] text-amber-900 font-bold leading-tight break-words mt-0.5">
+                      {merchantTenant.billHeaderNotes}
+                    </p>
+                  )}
 
                   <div className="text-xs text-gray-600 flex flex-wrap items-center gap-2 font-medium mt-1">
                     <span className="flex items-center gap-1">
@@ -439,14 +441,17 @@ export const BillGeneratorModal: React.FC<BillGeneratorModalProps> = ({
               </div>
             </div>
 
-            {/* Terms & Authorized Signature Footer */}
             <div className="pt-3 border-t border-gray-200 flex justify-between items-end text-xs text-gray-600">
-              <div>
-                <h5 className="font-bold text-gray-900 text-[10px] sm:text-xs">{t('terms')}:</h5>
-                <p className="whitespace-pre-line text-[9px] sm:text-[10px] text-gray-500 leading-relaxed mt-0.5">
-                  {merchantTenant.termsConditions || '1. All ornaments tested on digital purity scale.\n2. Goods once sold cannot be returned without cash memo.\n3. Khata subject to quarterly settlement.'}
-                </p>
-              </div>
+              {merchantTenant.termsConditions && merchantTenant.termsConditions.trim() ? (
+                <div>
+                  <h5 className="font-bold text-gray-900 text-[10px] sm:text-xs">{t('terms')}:</h5>
+                  <p className="whitespace-pre-line text-[9px] sm:text-[10px] text-gray-500 leading-relaxed mt-0.5">
+                    {merchantTenant.termsConditions}
+                  </p>
+                </div>
+              ) : (
+                <div />
+              )}
 
               <div className="text-right border-t-2 border-gray-800 pt-1.5 w-40 shrink-0">
                 <p className="font-bold text-gray-900 text-xs">{t('forShop')} {merchantTenant.shopName}</p>
