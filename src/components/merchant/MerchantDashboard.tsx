@@ -155,7 +155,7 @@ export const MerchantDashboard: React.FC = () => {
   const gridClass = enabledCount === 3 ? 'grid-cols-3' : enabledCount === 2 ? 'grid-cols-2' : 'grid-cols-1';
 
   return (
-    <div className="w-full max-w-md sm:max-w-full mx-auto px-3 sm:px-6 md:px-8 py-4 space-y-4 animate-fade-in pb-20">
+    <div className="w-full max-w-full lg:max-w-5xl mx-auto px-3 sm:px-6 lg:px-8 py-4 space-y-4 animate-fade-in pb-20">
       
       {/* 1. COMPACT SHOP HEADER */}
       <div className="bg-white rounded-xl p-3.5 border border-gray-200 shadow-2xs flex items-center justify-between gap-3">
