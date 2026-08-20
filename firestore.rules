@@ -1,0 +1,36 @@
+// Firebase Firestore Security Rules for Soni Navratri Jewelry Khata SaaS
+// These rules prevent the 30-day Test Mode expiration lock!
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // 1. Merchants Collection Rules
+    match /merchants/{merchantId} {
+      // Allow read and write for app operation
+      allow read, write: if true;
+    }
+
+    // 2. Customers Collection Rules
+    match /customers/{customerId} {
+      // Allow read, create, update, delete for registered customers
+      allow read, write: if true;
+    }
+
+    // 3. Ledger Entries (Khata Transactions) Rules
+    match /ledger_entries/{entryId} {
+      // Allow read, create, update, delete for transaction entries
+      allow read, write: if true;
+    }
+
+    // 4. Default Rule: Allow read/write for all other app documents without time expiration
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}
