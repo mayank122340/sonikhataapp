@@ -222,7 +222,7 @@ const MainContent: React.FC = () => {
       
       {/* Merchant Clean Navbar */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-30 shadow-xs print:hidden">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-2">
+        <div className="w-full max-w-5xl sm:max-w-full mx-auto px-4 sm:px-6 md:px-8 h-16 flex items-center justify-between gap-2">
           
           <div className="flex items-center space-x-2 sm:space-x-3 min-w-0">
             <div className="w-10 h-10 rounded-xl bg-gold-500 text-white flex items-center justify-center shadow-md font-bold text-xl shrink-0">

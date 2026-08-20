@@ -83,7 +83,7 @@ export const MerchantSettings: React.FC<MerchantSettingsProps> = ({ onBack }) =>
   const currentIndex = getBackupCount();
 
   return (
-    <div className="w-full max-w-md md:max-w-full mx-auto px-3 md:px-8 py-4 space-y-4 animate-fade-in pb-20">
+    <div className="w-full max-w-md sm:max-w-full mx-auto px-3 sm:px-6 md:px-8 py-4 space-y-4 animate-fade-in pb-20">
 
       {/* Header */}
       <div className="bg-white rounded-xl p-3.5 border border-gray-200 shadow-2xs flex items-center gap-3">

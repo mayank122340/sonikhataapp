@@ -52,7 +52,7 @@ export const CustomerModal: React.FC<CustomerModalProps> = ({
   return createPortal(
     /* Fullscreen Dark Overlay positioned higher up (pt-8) towards top of mobile screen */
     <div className="fixed inset-0 z-[100] bg-gray-950/90 backdrop-blur-md overflow-y-auto p-3 sm:p-4 flex flex-col justify-start items-center pt-8 sm:pt-12 pb-24 animate-fade-in min-h-screen w-full">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-sm md:max-w-xl w-full overflow-hidden border border-gray-100 shrink-0 mt-2 sm:mt-6">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-sm sm:max-w-xl w-full overflow-hidden border border-gray-100 shrink-0 mt-2 sm:mt-6">
         
         {/* Header */}
         <div className="bg-gold-500 text-white p-4 md:p-5 relative flex items-center justify-between">

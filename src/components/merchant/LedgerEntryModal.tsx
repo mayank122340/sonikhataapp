@@ -259,7 +259,7 @@ export const LedgerEntryModal: React.FC<LedgerEntryModalProps> = ({
 
   return createPortal(
     <div className="fixed inset-0 z-[100] bg-gray-950/90 backdrop-blur-md overflow-y-auto p-2 sm:p-4 flex flex-col justify-start items-center pt-6 sm:pt-10 pb-20 animate-fade-in min-h-screen w-full">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-md md:max-w-2xl w-full overflow-hidden border border-gray-200 shrink-0 mt-1 sm:mt-4">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-md sm:max-w-2xl w-full overflow-hidden border border-gray-200 shrink-0 mt-1 sm:mt-4">
         
         {/* Compact Header */}
         <div className="bg-gray-900 text-white px-4 py-3.5 md:px-5 md:py-4.5 relative flex items-center justify-between">
