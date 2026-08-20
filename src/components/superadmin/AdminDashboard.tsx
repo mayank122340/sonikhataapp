@@ -121,7 +121,7 @@ export const AdminDashboard: React.FC = () => {
   };
 
   return (
-    <div className="max-w-md sm:max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 space-y-4 animate-fade-in pb-20">
+    <div className="w-full max-w-full lg:max-w-5xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 space-y-4 animate-fade-in pb-20">
       
       {/* 1. COMPACT 4-CARD ANALYTICS GRID (2x2 on Mobile, 4-col on Desktop) */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4">

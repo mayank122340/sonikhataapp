@@ -111,7 +111,7 @@ const MainContent: React.FC = () => {
         
         {/* Isolated Super Admin Navbar */}
         <header className="bg-purple-950 text-white border-b border-purple-900 sticky top-0 z-30 shadow-md">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          <div className="w-full max-w-full lg:max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <div className="w-9 h-9 rounded-xl bg-purple-800 text-purple-200 flex items-center justify-center font-bold text-lg">
                 卐
