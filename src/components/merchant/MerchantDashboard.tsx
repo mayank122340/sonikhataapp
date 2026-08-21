@@ -312,14 +312,14 @@ export const MerchantDashboard: React.FC = () => {
             {t('customers')} ({merchantCustomers.length})
           </span>
 
-          <div className="relative flex-1 max-w-xs md:max-w-sm">
-            <Search className="w-3.5 h-3.5 md:w-4 md:h-4 absolute left-3 md:left-3.5 top-2.5 md:top-3.5 text-gray-400" />
+          <div className="relative flex-1 max-w-xs md:max-w-md">
+            <Search className="w-4 h-4 md:w-5 md:h-5 absolute left-3 md:left-3.5 top-3 md:top-3.5 text-gray-400" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder={t('searchCustomer')}
-              className="w-full pl-8 md:pl-10 pr-3 py-1.5 md:py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-gold-500 text-xs md:text-sm font-medium"
+              className="w-full pl-9 md:pl-11 pr-3.5 py-2 md:py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-gold-500 text-sm md:text-base font-semibold text-gray-800"
             />
           </div>
         </div>

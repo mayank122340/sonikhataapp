@@ -43,8 +43,29 @@ export const CustomerDetail: React.FC<CustomerDetailProps> = ({
   onDeleteEntry,
   onEditCustomer
 }) => {
-  const { toggleRokda } = useData();
+  const { toggleRokda, removeAllLedgerEntriesForCustomer } = useData();
   const { t, language } = useLanguage();
+
+  const handleDeleteAllEntries = async () => {
+    // 1. Show confirmation dialog
+    const confirmDelete = window.confirm(t('confirmDeleteAllMsg'));
+    if (!confirmDelete) return;
+
+    // 2. Validate that total balance is exactly 0
+    const isBalanceZero = balance.netMoney === 0 && balance.netGold === 0 && balance.netSilver === 0;
+    if (!isBalanceZero) {
+      alert(t('cannotDeleteBalanceNotZero'));
+      return;
+    }
+
+    // 3. Delete all entries
+    try {
+      await removeAllLedgerEntriesForCustomer(customer.id, entries);
+      alert(language === 'gu' ? 'તમામ વ્યવહાર સફળતાપૂર્વક કાઢી નાખવામાં આવ્યા છે!' : 'All entries deleted successfully!');
+    } catch (e) {
+      alert('Error deleting entries.');
+    }
+  };
 
   const [isEntryModalOpen, setIsEntryModalOpen] = useState(false);
   const [editingEntry, setEditingEntry] = useState<LedgerEntry | null>(null);
@@ -187,6 +208,16 @@ export const CustomerDetail: React.FC<CustomerDetailProps> = ({
 
         {/* Action Buttons */}
         <div className="flex items-center space-x-1.5 md:space-x-2 shrink-0">
+          {entries.length > 0 && (
+            <button
+              onClick={handleDeleteAllEntries}
+              className="p-2 md:p-3 bg-red-600 hover:bg-red-700 active:scale-95 text-white rounded-lg text-xs md:text-sm font-bold shadow-2xs flex items-center gap-1 transition-all"
+              title={t('deleteAllEntries')}
+            >
+              <Trash2 className="w-3.5 h-3.5 md:w-4 md:h-4 text-white" />
+              <span className="hidden sm:inline">{t('deleteAllEntries')}</span>
+            </button>
+          )}
           <button
             onClick={() => setIsBillModalOpen(true)}
             className="p-2 md:p-3 bg-gray-900 hover:bg-gray-800 text-white rounded-lg text-xs md:text-sm font-bold shadow-2xs flex items-center gap-1"
@@ -298,14 +329,14 @@ export const CustomerDetail: React.FC<CustomerDetailProps> = ({
           </div>
 
           {/* ALWAYS VISIBLE SEARCH BAR */}
-          <div className="relative w-full sm:w-52">
-            <Search className="w-3.5 h-3.5 absolute left-2.5 top-2 text-gray-400" />
+          <div className="relative w-full sm:w-72">
+            <Search className="w-4 h-4 absolute left-3 top-3 text-gray-400" />
             <input
               type="text"
               value={entrySearchQuery}
               onChange={(e) => setEntrySearchQuery(e.target.value)}
               placeholder={t('searchEntries')}
-              className="w-full pl-7 pr-2.5 py-1.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-gold-500 text-xs font-medium"
+              className="w-full pl-9 pr-3.5 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-gold-500 text-sm font-semibold text-gray-800"
             />
           </div>
         </div>

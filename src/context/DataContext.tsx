@@ -32,6 +32,7 @@ interface DataContextType {
   addLedgerEntry: (entryData: Omit<LedgerEntry, 'id' | 'createdAt'>) => LedgerEntry;
   updateLedgerEntry: (entry: LedgerEntry) => void;
   removeLedgerEntry: (entryId: string) => void;
+  removeAllLedgerEntriesForCustomer: (customerId: string, entries: LedgerEntry[]) => void;
   toggleRokda: (entryId: string) => void;
   refreshData: () => void;
 }
@@ -156,6 +157,11 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setLedgerEntries(prev => prev.filter(e => e.id !== entryId));
   };
 
+  const removeAllLedgerEntriesForCustomer = (customerId: string, entries: LedgerEntry[]) => {
+    storageService.deleteAllEntriesForCustomer(customerId, entries);
+    setLedgerEntries(prev => prev.filter(e => e.customerId !== customerId));
+  };
+
   // Toggle Rokda (Settled) status on an entry
   const toggleRokda = (entryId: string) => {
     const entry = ledgerEntries.find(e => e.id === entryId);
@@ -195,6 +201,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       addLedgerEntry,
       updateLedgerEntry,
       removeLedgerEntry,
+      removeAllLedgerEntriesForCustomer,
       toggleRokda,
       refreshData
     }}>

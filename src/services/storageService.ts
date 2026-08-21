@@ -7,7 +7,8 @@ import {
   saveCustomerToFirestore,
   deleteCustomerFromFirestore,
   saveLedgerEntryToFirestore,
-  deleteLedgerEntryFromFirestore
+  deleteLedgerEntryFromFirestore,
+  deleteAllLedgerEntriesForCustomer
 } from './firebaseService';
 
 const KEYS = {
@@ -191,5 +192,14 @@ export const deleteEntry = (entryId: string): void => {
 
   if (isFirebaseEnabled) {
     deleteLedgerEntryFromFirestore(entryId);
+  }
+};
+
+export const deleteAllEntriesForCustomer = (customerId: string, entriesToDelete: LedgerEntry[]): void => {
+  const list = getEntries().filter(e => e.customerId !== customerId);
+  saveEntries(list);
+
+  if (isFirebaseEnabled) {
+    deleteAllLedgerEntriesForCustomer(entriesToDelete);
   }
 };

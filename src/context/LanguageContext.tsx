@@ -81,7 +81,11 @@ const translations = {
     backupIndex: 'Backup Index',
     backupDesc: 'Download offline database backup file of all customer accounts and transaction history. Keep these files safe for recovery.',
     self: 'Self',
-    optional: 'Optional'
+    optional: 'Optional',
+    deleteAllEntries: 'Delete All Entries',
+    confirmDeleteAllTitle: 'Confirm Delete All Entries',
+    confirmDeleteAllMsg: 'Are you sure you want to delete all entries for this customer? This action cannot be undone.',
+    cannotDeleteBalanceNotZero: 'Account balance is not 0, so we cannot delete all entries'
   },
   gu: {
     money: 'નાણાં (રૂપિયા)',
@@ -161,7 +165,11 @@ const translations = {
     downloadBackup: 'બેકઅપ ડાઉનલોડ કરો',
     backupIndex: 'બેકઅપ ક્રમ',
     backupDesc: 'બધા ગ્રાહક ખાતાઓ અને વ્યવહારના ઇતિહાસની ઑફલાઇન ડેટાબેઝ બેકઅપ ફાઇલ ડાઉનલોડ કરો. પુનઃપ્રાપ્તિ માટે આ ફાઇલોને સુરક્ષિત રાખો.',
-    optional: 'વૈકલ્પિક'
+    optional: 'વૈકલ્પિક',
+    deleteAllEntries: 'તમામ એન્ટ્રીઓ કાઢી નાખો',
+    confirmDeleteAllTitle: 'તમામ એન્ટ્રીઓ કાઢી નાખવાની પુષ્ટિ',
+    confirmDeleteAllMsg: 'શું તમે આ ગ્રાહકની તમામ એન્ટ્રીઓ કાઢી નાખવા માંગો છો? આ પ્રક્રિયા પાછી ખેંચી શકાશે નહીં.',
+    cannotDeleteBalanceNotZero: 'ખાતું હજુ સરભર (0) થયેલ નથી, તેથી તમામ એન્ટ્રીઓ કાઢી શકાય નહીં'
   }
 };
 

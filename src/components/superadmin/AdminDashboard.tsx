@@ -172,13 +172,13 @@ export const AdminDashboard: React.FC = () => {
       <div className="bg-white p-3 rounded-xl border border-purple-200 shadow-2xs flex items-center justify-between gap-2">
         
         <div className="relative flex-1">
-          <Search className="w-3.5 h-3.5 absolute left-3 top-2.5 text-gray-400" />
+          <Search className="w-4 h-4 absolute left-3 top-3.5 text-gray-400" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search shop, username, or phone..."
-            className="w-full pl-8 pr-3 py-1.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 text-xs font-medium"
+            className="w-full pl-9 pr-3.5 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-purple-500 text-sm font-semibold text-gray-800"
           />
         </div>
 

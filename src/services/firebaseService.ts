@@ -146,3 +146,12 @@ export const deleteLedgerEntryFromFirestore = async (entryId: string) => {
     console.error('Firestore deleteLedgerEntry error:', e);
   }
 };
+
+export const deleteAllLedgerEntriesForCustomer = async (entries: LedgerEntry[]) => {
+  try {
+    const promises = entries.map(entry => deleteDoc(doc(db, COLLECTIONS.LEDGER_ENTRIES, entry.id)));
+    await Promise.all(promises);
+  } catch (e) {
+    console.error('Firestore deleteAllLedgerEntriesForCustomer error:', e);
+  }
+};
