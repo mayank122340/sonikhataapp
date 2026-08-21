@@ -14,7 +14,7 @@ const BACKUP_COUNTER_KEY = 'soni_merchant_backup_count';
 export const MerchantSettings: React.FC<MerchantSettingsProps> = ({ onBack }) => {
   const { user } = useAuth();
   const { merchants, customers, ledgerEntries } = useData();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [isDownloading, setIsDownloading] = useState(false);
   const [lastDownloaded, setLastDownloaded] = useState<string | null>(null);
 
