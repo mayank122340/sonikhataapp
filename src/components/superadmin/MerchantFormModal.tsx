@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Merchant, TenantConfig } from '../../types';
-import { X, Store, Sparkles, Award, Upload } from '../common/Icons';
+import { X, Store, Sparkles, Award, Upload, Calendar, Clock } from '../common/Icons';
 
 interface MerchantFormModalProps {
   isOpen: boolean;
@@ -35,6 +35,8 @@ export const MerchantFormModal: React.FC<MerchantFormModalProps> = ({
   const [enableSilver, setEnableSilver] = useState(true);
   const [enableBillPhotos, setEnableBillPhotos] = useState(false);
   const [entryFormLayout, setEntryFormLayout] = useState<'remarks_first' | 'assets_first'>('remarks_first');
+  const [allowManualDate, setAllowManualDate] = useState(false);
+  const [enableTime, setEnableTime] = useState(true);
 
   const compressImage = (file: File): Promise<string> => {
     return new Promise((resolve) => {
@@ -110,6 +112,8 @@ export const MerchantFormModal: React.FC<MerchantFormModalProps> = ({
       setEnableSilver(initialMerchant.tenantConfig.enableSilver !== false);
       setEnableBillPhotos(initialMerchant.tenantConfig.enableBillPhotos === true);
       setEntryFormLayout(initialMerchant.tenantConfig.entryFormLayout || 'remarks_first');
+      setAllowManualDate(initialMerchant.tenantConfig.allowManualDate === true);
+      setEnableTime(initialMerchant.tenantConfig.enableTime !== false);
     } else {
       setUsername('');
       setPassword('password123');
@@ -127,6 +131,8 @@ export const MerchantFormModal: React.FC<MerchantFormModalProps> = ({
       setEnableSilver(true);
       setEnableBillPhotos(false);
       setEntryFormLayout('remarks_first');
+      setAllowManualDate(false);
+      setEnableTime(true);
     }
   }, [initialMerchant, isOpen]);
 
@@ -148,7 +154,9 @@ export const MerchantFormModal: React.FC<MerchantFormModalProps> = ({
       enableGold,
       enableSilver,
       enableBillPhotos,
-      entryFormLayout
+      entryFormLayout,
+      allowManualDate,
+      enableTime
     };
 
     onSave({
@@ -340,6 +348,44 @@ export const MerchantFormModal: React.FC<MerchantFormModalProps> = ({
                   }`}
                 >
                   {enableBillPhotos ? 'ON' : 'OFF'}
+                </button>
+              </div>
+
+              {/* Manual Date Toggle */}
+              <div className={`p-2 rounded-lg border transition-all flex items-center justify-between ${
+                allowManualDate ? 'bg-indigo-50 border-indigo-300' : 'bg-gray-100 border-gray-200 opacity-60'
+              }`}>
+                <div className="flex items-center space-x-1.5">
+                  <Calendar className="w-3.5 h-3.5 text-indigo-700" />
+                  <span className="text-xs font-bold text-gray-900">Allow Manual Date</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setAllowManualDate(!allowManualDate)}
+                  className={`px-2 py-0.5 rounded text-[10px] font-black transition-all ${
+                    allowManualDate ? 'bg-indigo-700 text-white' : 'bg-gray-300 text-gray-700'
+                  }`}
+                >
+                  {allowManualDate ? 'ON' : 'OFF'}
+                </button>
+              </div>
+
+              {/* Capture Time Toggle */}
+              <div className={`p-2 rounded-lg border transition-all flex items-center justify-between ${
+                enableTime ? 'bg-teal-50 border-teal-300' : 'bg-gray-100 border-gray-200 opacity-60'
+              }`}>
+                <div className="flex items-center space-x-1.5">
+                  <Clock className="w-3.5 h-3.5 text-teal-700" />
+                  <span className="text-xs font-bold text-gray-900">Capture Time</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setEnableTime(!enableTime)}
+                  className={`px-2 py-0.5 rounded text-[10px] font-black transition-all ${
+                    enableTime ? 'bg-teal-700 text-white' : 'bg-gray-300 text-gray-700'
+                  }`}
+                >
+                  {enableTime ? 'ON' : 'OFF'}
                 </button>
               </div>
 

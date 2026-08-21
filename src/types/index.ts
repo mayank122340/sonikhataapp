@@ -22,6 +22,8 @@ export interface TenantConfig {
   enableSilver?: boolean; // default: true (Can be toggled OFF by Super Admin)
   enableBillPhotos?: boolean; // default: false (Can be toggled ON by Super Admin)
   entryFormLayout?: 'remarks_first' | 'assets_first'; // Layout ordering: Remarks/Details first vs Assets/Weights first
+  allowManualDate?: boolean; // default: false (If true, merchant can manually select date)
+  enableTime?: boolean; // default: true (If true, time is enabled and captured)
 }
 
 export interface Merchant {

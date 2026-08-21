@@ -369,7 +369,9 @@ export const CustomerDetail: React.FC<CustomerDetailProps> = ({
                     <span className={`font-bold text-xs md:text-sm ${entry.isRokda ? 'text-gray-500 line-through' : 'text-gray-900'}`}>
                       {formatDate(entry.date)}
                     </span>
-                    <span className="text-gray-400 font-mono text-[10px] md:text-xs">{formatTime12Hr(entry.time)}</span>
+                    {merchantTenant?.enableTime !== false && entry.time && (
+                      <span className="text-gray-400 font-mono text-[10px] md:text-xs">{formatTime12Hr(entry.time)}</span>
+                    )}
                     {/* ROKDA BADGE */}
                     {entry.isRokda && (
                       <span className="text-[9px] md:text-[10px] font-black bg-green-100 text-green-800 border border-green-300 px-1.5 py-0.2 rounded-full flex items-center gap-0.5">

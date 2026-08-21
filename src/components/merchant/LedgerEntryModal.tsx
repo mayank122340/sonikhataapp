@@ -237,8 +237,13 @@ export const LedgerEntryModal: React.FC<LedgerEntryModalProps> = ({
       return;
     }
 
-    const entryDate = initialEntry ? date : getTodayDate();
-    const entryTime = initialEntry ? time : getCurrentTime();
+    const allowManual = merchantTenant?.allowManualDate === true;
+    const isTimeEnabled = merchantTenant?.enableTime !== false;
+
+    const entryDate = (allowManual || initialEntry) ? date : getTodayDate();
+    const entryTime = isTimeEnabled 
+      ? ((allowManual || initialEntry) ? time : getCurrentTime())
+      : undefined;
 
     onSave({
       date: entryDate,
@@ -282,15 +287,42 @@ export const LedgerEntryModal: React.FC<LedgerEntryModalProps> = ({
         {/* Compact Form */}
         <form onSubmit={handleSubmit} onKeyDown={handleFormKeyDown} className="p-4 md:p-6 flex flex-col space-y-3.5 md:space-y-5">
           
-          {/* Auto Date Banner */}
-          <div style={{ order: 1 }} className="bg-amber-50 rounded-xl px-3 py-2.5 md:px-4 md:py-3.5 border border-amber-200 flex items-center justify-between text-xs md:text-sm font-black">
-            <span className="text-amber-900 truncate">
-              📅 Date: <strong className="text-gray-900">{formatDate(date)}</strong>
-            </span>
-            <span className="text-[11px] md:text-xs font-black bg-amber-200/80 text-amber-900 px-2 py-0.5 rounded shrink-0">
-              ⏰ {formatTime12Hr(time)}
-            </span>
-          </div>
+          {/* Date & Time Selection / Display Banner */}
+          {merchantTenant?.allowManualDate === true ? (
+            <div style={{ order: 1 }} className="bg-amber-50 rounded-xl px-3 py-2.5 md:px-4 md:py-3 border border-amber-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs md:text-sm font-black">
+              <div className="flex items-center gap-2 w-full sm:w-auto">
+                <span className="text-amber-900 shrink-0">📅 {language === 'gu' ? 'તારીખ' : 'Date'}:</span>
+                <input
+                  type="date"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                  className="px-2.5 py-1 rounded-lg border border-amber-300 focus:ring-2 focus:ring-amber-500 font-extrabold text-gray-900 bg-white text-xs md:text-sm flex-1 sm:flex-none cursor-pointer"
+                />
+              </div>
+              {merchantTenant?.enableTime !== false && (
+                <div className="flex items-center gap-2 w-full sm:w-auto">
+                  <span className="text-amber-900 shrink-0">⏰ {language === 'gu' ? 'સમય' : 'Time'}:</span>
+                  <input
+                    type="time"
+                    value={time}
+                    onChange={(e) => setTime(e.target.value)}
+                    className="px-2.5 py-1 rounded-lg border border-amber-300 focus:ring-2 focus:ring-amber-500 font-extrabold text-gray-900 bg-white text-xs md:text-sm flex-1 sm:flex-none cursor-pointer"
+                  />
+                </div>
+              )}
+            </div>
+          ) : (
+            <div style={{ order: 1 }} className="bg-amber-50 rounded-xl px-3 py-2.5 md:px-4 md:py-3.5 border border-amber-200 flex items-center justify-between text-xs md:text-sm font-black">
+              <span className="text-amber-900 truncate">
+                📅 {language === 'gu' ? 'તારીખ' : 'Date'}: <strong className="text-gray-900">{formatDate(date)}</strong>
+              </span>
+              {merchantTenant?.enableTime !== false && (
+                <span className="text-[11px] md:text-xs font-black bg-amber-200/80 text-amber-900 px-2 py-0.5 rounded shrink-0">
+                  ⏰ {formatTime12Hr(time)}
+                </span>
+              )}
+            </div>
+          )}
 
           {/* Remarks & Hastak Row */}
           <div style={{ order: isAssetsFirst ? 3 : 2 }} className="grid grid-cols-3 md:grid-cols-4 gap-3 md:gap-4">

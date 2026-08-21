@@ -257,7 +257,9 @@ export const BillGeneratorModal: React.FC<BillGeneratorModalProps> = ({
                         {/* 1. Date & Time (Left Side Every Time) */}
                         <td className="py-2.5 px-3 font-medium text-gray-700 whitespace-nowrap align-top">
                           <div className="font-bold text-gray-900 text-xs">{formatDate(entry.date)}</div>
-                          <div className="text-[10px] text-gray-500 font-mono">{formatTime12Hr(entry.time)}</div>
+                          {merchantTenant?.enableTime !== false && entry.time && (
+                            <div className="text-[10px] text-gray-500 font-mono">{formatTime12Hr(entry.time)}</div>
+                          )}
                         </td>
 
                         {/* 2. Description & Hastak */}
