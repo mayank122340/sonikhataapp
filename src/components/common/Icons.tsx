@@ -261,4 +261,12 @@ export const Image: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   </svg>
 );
 
+export const Package: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <path d="M16.5 9.4 7.55 4.24a1.79 1.79 0 0 0-1.8 0L2 6.74a1.79 1.79 0 0 0-.9 1.55v6.42a1.79 1.79 0 0 0 .9 1.55l3.75 2.5a1.79 1.79 0 0 0 1.8 0L16.5 13.6a1.79 1.79 0 0 0 .9-1.55V11a1.79 1.79 0 0 0-.9-1.6Z"/>
+    <path d="m16.5 9.4-9 5.2-7.5-4.35"/>
+    <path d="M7.5 14.6V20"/>
+  </svg>
+);
+
 

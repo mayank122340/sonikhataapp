@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useData } from '../../context/DataContext';
 import { useLanguage } from '../../context/LanguageContext';
-import { ArrowLeft, HardDrive, Download } from '../common/Icons';
+import { ArrowLeft, HardDrive, Download, Package } from '../common/Icons';
 
 interface MerchantSettingsProps {
   onBack: () => void;
@@ -80,27 +80,82 @@ export const MerchantSettings: React.FC<MerchantSettingsProps> = ({ onBack }) =>
     }
   };
 
+  const [activeView, setActiveView] = useState<'menu' | 'backup' | 'stock'>('menu');
   const currentIndex = getBackupCount();
 
-  return (
-    <div className="w-full max-w-full lg:max-w-5xl mx-auto px-3 sm:px-6 lg:px-8 py-4 space-y-4 animate-fade-in pb-20">
+  // 1. BACK BUTTON HANDLER BASED ON CURRENT SUBVIEW
+  const handleBackAction = () => {
+    if (activeView === 'menu') {
+      onBack();
+    } else {
+      setActiveView('menu');
+    }
+  };
 
-      {/* Header */}
-      <div className="bg-white rounded-xl p-3.5 border border-gray-200 shadow-2xs flex items-center gap-3">
-        <button
-          onClick={onBack}
-          className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 active:scale-95 text-gray-800 transition-all font-bold text-xs flex items-center gap-1 shrink-0"
-        >
-          <ArrowLeft className="w-4 h-4 text-gray-700" />
-          <span className="font-bold">{t('backToDashboard')}</span>
-        </button>
-        <div>
-          <h2 className="text-sm font-bold text-gray-900 leading-tight">{t('settings')}</h2>
-          <p className="text-[11px] text-gray-400">{currentMerchant?.tenantConfig.shopName}</p>
+  // 2. STOCK VIEW SUB-PAGE PLACEHOLDER
+  const renderStockView = () => {
+    return (
+      <div className="bg-white rounded-xl border border-gray-200 shadow-2xs overflow-hidden">
+        {/* Sub-page Header */}
+        <div className="bg-amber-900 text-white px-4 py-3 flex items-center gap-2">
+          <Package className="w-4 h-4 text-amber-300 shrink-0" />
+          <div>
+            <h3 className="text-xs font-bold text-white">સ્ટોક મેનેજમેન્ટ (Stock Management)</h3>
+            <p className="text-[10px] text-amber-200 font-medium">Inventory & Item Tracking</p>
+          </div>
+        </div>
+
+        {/* Mock Body */}
+        <div className="p-4 md:p-6 space-y-6">
+          <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs md:text-sm text-amber-900 font-bold leading-relaxed">
+            ℹ️ વસ્તુઓ અને સ્ટોકનું ટ્રેકિંગ આગળના તબક્કામાં ઉમેરવામાં આવશે. (Items and stock tracking page details will be set up in the next step.)
+          </div>
+
+          {/* Mock Search & Action Controls */}
+          <div className="flex items-center justify-between gap-2 border-b pb-3.5">
+            <div className="bg-gray-100 px-3 py-2 rounded-lg text-xs font-semibold text-gray-500 w-full max-w-xs">
+              Search stock items...
+            </div>
+            <button disabled className="px-3.5 py-2 bg-amber-700 opacity-60 text-white text-xs font-bold rounded-lg shrink-0 cursor-not-allowed">
+              + Add Item (સ્ટોક ઉમેરો)
+            </button>
+          </div>
+
+          {/* Mock Stock Table */}
+          <div className="overflow-x-auto border border-gray-100 rounded-xl">
+            <table className="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr className="bg-gray-50 text-gray-500 uppercase text-[9px] font-black border-b border-gray-100">
+                  <th className="py-2.5 px-3">વસ્તુ (Item Name)</th>
+                  <th className="py-2.5 px-3 text-center">પ્રકાર (Type)</th>
+                  <th className="py-2.5 px-3 text-center">વજન (Weight)</th>
+                  <th className="py-2.5 px-3 text-right">જથ્થો (Qty)</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100 text-gray-700 font-bold">
+                <tr>
+                  <td className="py-2 px-3 text-gray-900">સોનાની વીંટી (Gold Ring)</td>
+                  <td className="py-2 px-3 text-center text-amber-600">Gold</td>
+                  <td className="py-2 px-3 text-center">5.420 g</td>
+                  <td className="py-2 px-3 text-right">2 Pcs</td>
+                </tr>
+                <tr>
+                  <td className="py-2 px-3 text-gray-900">ચાંદીના સાંકળા (Silver Payal)</td>
+                  <td className="py-2 px-3 text-center text-slate-600">Silver</td>
+                  <td className="py-2 px-3 text-center">120.000 g</td>
+                  <td className="py-2 px-3 text-right">1 Pair</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
+    );
+  };
 
-      {/* Backup Card */}
+  // 3. BACKUP VIEW SUB-PAGE
+  const renderBackupView = () => {
+    return (
       <div className="bg-white rounded-xl border border-gray-200 shadow-2xs overflow-hidden">
         {/* Card Header */}
         <div className="bg-gray-900 text-white px-4 py-3 flex items-center gap-2">
@@ -167,6 +222,93 @@ export const MerchantSettings: React.FC<MerchantSettingsProps> = ({ onBack }) =>
           </p>
         </div>
       </div>
+    );
+  };
+
+  // 4. MAIN FEATURES MENU VIEW (Portal page)
+  const renderMenuView = () => {
+    const showStock = currentMerchant?.tenantConfig.enableStock === true;
+
+    return (
+      <div className="space-y-4">
+        {/* Menu title banner */}
+        <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-2xs">
+          <h3 className="text-xs font-black text-gray-400 uppercase tracking-wider mb-2">કસ્ટમ ટુલ્સ (Custom Tools & Features)</h3>
+          <p className="text-xs text-gray-500">Dukaan ke custom tools manage karne ke liye niche diye gaye option par click karein.</p>
+        </div>
+
+        {/* Features Buttons Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          
+          {/* Feature 1: Data Backup */}
+          <button
+            onClick={() => setActiveView('backup')}
+            className="bg-white hover:bg-purple-50/50 p-4 rounded-xl border border-gray-200 hover:border-purple-300 text-left transition-all active:scale-[0.99] flex items-start gap-3.5 group shadow-2xs"
+          >
+            <div className="w-12 h-12 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+              <HardDrive className="w-6 h-6" />
+            </div>
+            <div>
+              <h4 className="font-extrabold text-sm text-gray-900 group-hover:text-purple-900 transition-colors">
+                ડેટા બેકઅપ (Data Backup)
+              </h4>
+              <p className="text-[11px] text-gray-400 font-medium leading-relaxed mt-0.5">
+                Apne customer ledger ka complete offline backup JSON format me download karein.
+              </p>
+            </div>
+          </button>
+
+          {/* Feature 2: Stock Management (Conditional Admin Switch) */}
+          {showStock && (
+            <button
+              onClick={() => setActiveView('stock')}
+              className="bg-white hover:bg-amber-50/50 p-4 rounded-xl border border-gray-200 hover:border-amber-300 text-left transition-all active:scale-[0.99] flex items-start gap-3.5 group shadow-2xs"
+            >
+              <div className="w-12 h-12 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                <Package className="w-6 h-6" />
+              </div>
+              <div>
+                <h4 className="font-extrabold text-sm text-gray-900 group-hover:text-amber-900 transition-colors">
+                  સ્ટોક મેનેજમેન્ટ (Stock Management)
+                </h4>
+                <p className="text-[11px] text-gray-400 font-medium leading-relaxed mt-0.5">
+                  Dukaan ke sone-chandi ke daagine (Ornaments) aur inventory track karein.
+                </p>
+              </div>
+            </button>
+          )}
+
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="w-full max-w-full lg:max-w-5xl mx-auto px-3 sm:px-6 lg:px-8 py-4 space-y-4 animate-fade-in pb-20">
+
+      {/* Dynamic Header */}
+      <div className="bg-white rounded-xl p-3.5 border border-gray-200 shadow-2xs flex items-center gap-3">
+        <button
+          onClick={handleBackAction}
+          className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 active:scale-95 text-gray-800 transition-all font-bold text-xs flex items-center gap-1 shrink-0"
+        >
+          <ArrowLeft className="w-4 h-4 text-gray-700" />
+          <span className="font-bold">
+            {activeView === 'menu' ? t('backToDashboard') : (language === 'gu' ? 'પાછા જાઓ' : 'Back')}
+          </span>
+        </button>
+        <div>
+          <h2 className="text-sm font-bold text-gray-900 leading-tight">
+            {activeView === 'menu' ? t('settings') : (activeView === 'backup' ? t('downloadBackup') : 'સ્ટોક મેનેજમેન્ટ (Stock)')}
+          </h2>
+          <p className="text-[11px] text-gray-400">{currentMerchant?.tenantConfig.shopName}</p>
+        </div>
+      </div>
+
+      {/* Main viewport */}
+      {activeView === 'menu' && renderMenuView()}
+      {activeView === 'backup' && renderBackupView()}
+      {activeView === 'stock' && renderStockView()}
 
     </div>
   );

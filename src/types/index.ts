@@ -24,6 +24,7 @@ export interface TenantConfig {
   entryFormLayout?: 'remarks_first' | 'assets_first'; // Layout ordering: Remarks/Details first vs Assets/Weights first
   allowManualDate?: boolean; // default: false (If true, merchant can manually select date)
   enableTime?: boolean; // default: true (If true, time is enabled and captured)
+  enableStock?: boolean; // default: false (If true, merchant has access to Stock Management)
 }
 
 export interface Merchant {

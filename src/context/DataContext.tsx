@@ -96,19 +96,23 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     storageService.saveMerchant(newMerchant);
+    setMerchants(prev => [newMerchant, ...prev]);
     return newMerchant;
   };
 
   const updateMerchant = (merchant: Merchant) => {
     storageService.saveMerchant(merchant);
+    setMerchants(prev => prev.map(m => m.id === merchant.id ? merchant : m));
   };
 
   const removeMerchant = (merchantId: string) => {
     storageService.deleteMerchant(merchantId);
+    setMerchants(prev => prev.filter(m => m.id !== merchantId));
   };
 
   const toggleSubscription = (merchantId: string, active: boolean) => {
     storageService.toggleMerchantSubscription(merchantId, active);
+    setMerchants(prev => prev.map(m => m.id === merchantId ? { ...m, subscriptionActive: active } : m));
   };
 
   // --- CUSTOMER OPERATIONS ---

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Merchant, TenantConfig } from '../../types';
-import { X, Store, Sparkles, Award, Upload, Calendar, Clock } from '../common/Icons';
+import { X, Store, Sparkles, Award, Upload, Calendar, Clock, Package } from '../common/Icons';
 
 interface MerchantFormModalProps {
   isOpen: boolean;
@@ -37,6 +37,7 @@ export const MerchantFormModal: React.FC<MerchantFormModalProps> = ({
   const [entryFormLayout, setEntryFormLayout] = useState<'remarks_first' | 'assets_first'>('remarks_first');
   const [allowManualDate, setAllowManualDate] = useState(false);
   const [enableTime, setEnableTime] = useState(true);
+  const [enableStock, setEnableStock] = useState(false);
 
   const compressImage = (file: File): Promise<string> => {
     return new Promise((resolve) => {
@@ -114,6 +115,7 @@ export const MerchantFormModal: React.FC<MerchantFormModalProps> = ({
       setEntryFormLayout(initialMerchant.tenantConfig.entryFormLayout || 'remarks_first');
       setAllowManualDate(initialMerchant.tenantConfig.allowManualDate === true);
       setEnableTime(initialMerchant.tenantConfig.enableTime !== false);
+      setEnableStock(initialMerchant.tenantConfig.enableStock === true);
     } else {
       setUsername('');
       setPassword('password123');
@@ -133,6 +135,7 @@ export const MerchantFormModal: React.FC<MerchantFormModalProps> = ({
       setEntryFormLayout('remarks_first');
       setAllowManualDate(false);
       setEnableTime(true);
+      setEnableStock(false);
     }
   }, [initialMerchant, isOpen]);
 
@@ -156,7 +159,8 @@ export const MerchantFormModal: React.FC<MerchantFormModalProps> = ({
       enableBillPhotos,
       entryFormLayout,
       allowManualDate,
-      enableTime
+      enableTime,
+      enableStock
     };
 
     onSave({
@@ -386,6 +390,25 @@ export const MerchantFormModal: React.FC<MerchantFormModalProps> = ({
                   }`}
                 >
                   {enableTime ? 'ON' : 'OFF'}
+                </button>
+              </div>
+
+              {/* Stock Management Toggle */}
+              <div className={`p-2 rounded-lg border transition-all flex items-center justify-between ${
+                enableStock ? 'bg-amber-50 border-amber-300' : 'bg-gray-100 border-gray-200 opacity-60'
+              }`}>
+                <div className="flex items-center space-x-1.5">
+                  <Package className="w-3.5 h-3.5 text-amber-700" />
+                  <span className="text-xs font-bold text-gray-900">Stock Management</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setEnableStock(!enableStock)}
+                  className={`px-2 py-0.5 rounded text-[10px] font-black transition-all ${
+                    enableStock ? 'bg-amber-700 text-white' : 'bg-gray-300 text-gray-700'
+                  }`}
+                >
+                  {enableStock ? 'ON' : 'OFF'}
                 </button>
               </div>
 

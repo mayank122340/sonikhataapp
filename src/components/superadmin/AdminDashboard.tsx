@@ -293,8 +293,28 @@ export const AdminDashboard: React.FC = () => {
                           {merchant.username}
                         </code>
                       </p>
+                      
+                      {/* Active Features Badges */}
+                      <div className="mt-1 flex flex-wrap gap-1">
+                        {merchant.tenantConfig.enableGold !== false && (
+                          <span className="text-[9px] font-black bg-amber-50 text-amber-800 border border-amber-200 px-1.5 py-0.2 rounded">Gold</span>
+                        )}
+                        {merchant.tenantConfig.enableSilver !== false && (
+                          <span className="text-[9px] font-black bg-slate-100 text-slate-700 border border-slate-200 px-1.5 py-0.2 rounded">Silver</span>
+                        )}
+                        {merchant.tenantConfig.enableBillPhotos === true && (
+                          <span className="text-[9px] font-black bg-purple-50 text-purple-800 border border-purple-200 px-1.5 py-0.2 rounded">Photos</span>
+                        )}
+                        {merchant.tenantConfig.allowManualDate === true && (
+                          <span className="text-[9px] font-black bg-indigo-50 text-indigo-800 border border-indigo-200 px-1.5 py-0.2 rounded">Manual Date</span>
+                        )}
+                        {merchant.tenantConfig.enableStock === true && (
+                          <span className="text-[9px] font-black bg-amber-100 text-amber-900 border border-amber-300 px-1.5 py-0.2 rounded">Stock</span>
+                        )}
+                      </div>
+
                       {/* Last Active Status */}
-                      <div className="mt-1 flex items-center gap-1.5 text-[10px] font-bold">
+                      <div className="mt-1.5 flex items-center gap-1.5 text-[10px] font-bold">
                         {renderLastActiveStatus(merchant.lastActiveAt)}
                       </div>
                     </div>
