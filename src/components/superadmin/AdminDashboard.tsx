@@ -113,6 +113,52 @@ export const AdminDashboard: React.FC = () => {
     }
   };
 
+  const renderLastActiveStatus = (lastActiveAt?: string) => {
+    if (!lastActiveAt) {
+      return (
+        <span className="text-gray-400 flex items-center gap-1">
+          <span className="w-1.5 h-1.5 rounded-full bg-gray-300"></span>
+          Never active
+        </span>
+      );
+    }
+
+    const diffMs = Date.now() - new Date(lastActiveAt).getTime();
+    const diffMins = Math.floor(diffMs / (60 * 1000));
+    const diffHours = Math.floor(diffMs / (60 * 60 * 1000));
+    const diffDays = Math.floor(diffMs / (24 * 60 * 60 * 1000));
+
+    if (diffMins < 2) {
+      return (
+        <span className="text-emerald-600 font-extrabold flex items-center gap-1">
+          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          Live Now 🟢
+        </span>
+      );
+    } else if (diffMins < 60) {
+      return (
+        <span className="text-amber-600 flex items-center gap-1 font-extrabold">
+          <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+          Active {diffMins}m ago
+        </span>
+      );
+    } else if (diffHours < 24) {
+      return (
+        <span className="text-amber-700 flex items-center gap-1 font-bold">
+          <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+          Active {diffHours}h ago
+        </span>
+      );
+    } else {
+      return (
+        <span className="text-red-500 flex items-center gap-1 font-semibold">
+          <span className="w-1.5 h-1.5 rounded-full bg-red-400"></span>
+          Active {diffDays}d ago
+        </span>
+      );
+    }
+  };
+
   const handleConfirmDeleteMerchant = () => {
     if (deletingMerchantId) {
       removeMerchant(deletingMerchantId);
@@ -138,22 +184,22 @@ export const AdminDashboard: React.FC = () => {
 
         {/* Active Subscriptions */}
         <div className="bg-white p-3 rounded-xl border border-emerald-200 shadow-2xs flex flex-col justify-between">
-          <span className="text-[10px] font-bold text-emerald-800 uppercase tracking-wider">Active SaaS</span>
+          <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Subscriptions</span>
           <div className="flex items-center justify-between my-1">
-            <h3 className="text-lg sm:text-2xl font-black text-emerald-600">{analytics.activeSubscriptions}</h3>
-            <UserCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+            <h3 className="text-lg sm:text-2xl font-black text-emerald-950">{analytics.activeSubscriptions}</h3>
+            <CheckCircle2 className="w-4 h-4 text-emerald-700 shrink-0" />
           </div>
-          <span className="text-[9px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded w-max">Live Active</span>
+          <span className="text-[9px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded w-max">Active</span>
         </div>
 
-        {/* Locked Subscriptions */}
+        {/* Locked Accounts */}
         <div className="bg-white p-3 rounded-xl border border-red-200 shadow-2xs flex flex-col justify-between">
-          <span className="text-[10px] font-bold text-red-800 uppercase tracking-wider">Locked SaaS</span>
+          <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Locked Accounts</span>
           <div className="flex items-center justify-between my-1">
-            <h3 className="text-lg sm:text-2xl font-black text-red-600">{analytics.inactiveSubscriptions}</h3>
-            <UserX className="w-4 h-4 text-red-600 shrink-0" />
+            <h3 className="text-lg sm:text-2xl font-black text-red-950">{analytics.inactiveSubscriptions}</h3>
+            <XCircle className="w-4 h-4 text-red-700 shrink-0" />
           </div>
-          <span className="text-[9px] font-bold text-red-700 bg-red-50 px-1.5 py-0.5 rounded w-max">Disabled</span>
+          <span className="text-[9px] font-bold text-red-700 bg-red-50 px-1.5 py-0.5 rounded w-max">Suspended</span>
         </div>
 
         {/* SaaS Customers */}
@@ -244,6 +290,10 @@ export const AdminDashboard: React.FC = () => {
                           {merchant.username}
                         </code>
                       </p>
+                      {/* Last Active Status */}
+                      <div className="mt-1 flex items-center gap-1.5 text-[10px] font-bold">
+                        {renderLastActiveStatus(merchant.lastActiveAt)}
+                      </div>
                     </div>
                   </div>
 

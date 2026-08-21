@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useData } from '../../context/DataContext';
@@ -29,13 +29,40 @@ export const MerchantDashboard: React.FC = () => {
     updateCustomer, 
     addLedgerEntry, 
     updateLedgerEntry, 
-    removeLedgerEntry 
+    removeLedgerEntry,
+    updateMerchant
   } = useData();
 
   const merchantId = user?.merchantId;
 
   // Always read the LIVE updated merchant object from DataContext!
   const currentMerchant = merchants.find(m => m.id === merchantId) || user?.merchant;
+
+  // Track Merchant's Last Active status (Optimized once every 5 minutes to prevent DB write spam)
+  useEffect(() => {
+    const updateActivity = async () => {
+      if (!currentMerchant || !merchantId) return;
+
+      const sessionKey = `soni_activity_updated_${merchantId}`;
+      const lastUpdated = sessionStorage.getItem(sessionKey);
+      const now = Date.now();
+
+      if (!lastUpdated || now - parseInt(lastUpdated, 10) > 5 * 60 * 1000) {
+        try {
+          const updated = {
+            ...currentMerchant,
+            lastActiveAt: new Date().toISOString()
+          };
+          updateMerchant(updated);
+          sessionStorage.setItem(sessionKey, String(now));
+        } catch (err) {
+          console.error('Failed to update merchant activity status:', err);
+        }
+      }
+    };
+
+    updateActivity();
+  }, [currentMerchant, merchantId]);
 
   const merchantTenant = currentMerchant?.tenantConfig || {
     shopName: 'Soni Jewelry Store',

@@ -33,6 +33,7 @@ export interface Merchant {
   subscriptionActive: boolean;
   tenantConfig: TenantConfig;
   createdAt: string;
+  lastActiveAt?: string; // Timestamp of merchant's last activity
 }
 
 export interface Customer {
