@@ -28,20 +28,20 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
   const isRed = isDelete || isAlert;
 
   return createPortal(
-    <div className="fixed inset-0 z-[110] bg-gray-950/80 backdrop-blur-xs p-4 flex flex-col justify-center items-center animate-fade-in w-full h-full">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-gray-200 shrink-0">
+    <div className="fixed inset-0 z-[110] bg-gray-950/80 backdrop-blur-sm p-4 flex flex-col justify-center items-center animate-fade-in w-full h-full">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 overflow-hidden border border-gray-200 shrink-0">
         
         {/* Header */}
-        <div className={`p-4.5 sm:p-5 text-white flex items-center justify-between ${
+        <div className={`p-4 sm:p-5 text-white flex items-center justify-between ${
           isRed ? 'bg-red-600' : 'bg-gold-500'
         }`}>
-          <div className="flex items-center space-x-2.5">
+          <div className="flex items-center space-x-2">
             {isAlert ? (
-              <AlertCircle className="w-5.5 h-5.5 md:w-6 md:h-6 text-white" />
+              <AlertCircle className="w-5 h-5 md:w-6 md:h-6 text-white" />
             ) : isDelete ? (
-              <Trash2 className="w-5.5 h-5.5 md:w-6 md:h-6 text-white" />
+              <Trash2 className="w-5 h-5 md:w-6 md:h-6 text-white" />
             ) : (
-              <Edit3 className="w-5.5 h-5.5 md:w-6 md:h-6 text-white" />
+              <Edit3 className="w-5 h-5 md:w-6 md:h-6 text-white" />
             )}
             <h3 className="text-base md:text-lg font-black text-white tracking-wide">{title}</h3>
           </div>
@@ -55,7 +55,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
 
         {/* Content */}
         <div className="p-5 sm:p-6 space-y-4">
-          <div className="flex items-start space-x-3.5">
+          <div className="flex items-start space-x-3">
             <AlertCircle className={`w-6 h-6 shrink-0 mt-0.5 ${
               isRed ? 'text-red-500' : 'text-gold-500'
             }`} />
@@ -65,12 +65,12 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
           </div>
 
           {/* Action Buttons */}
-          <div className="flex justify-end space-x-3 pt-4 border-t border-gray-100">
+          <div className="flex flex-row items-center justify-end gap-2 pt-4 border-t border-gray-100 flex-wrap">
             {!isAlert && (
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2.5 rounded-xl border border-gray-300 text-sm font-black text-gray-700 hover:bg-gray-50 active:scale-95 transition-transform"
+                className="px-3.5 py-2 rounded-xl border border-gray-300 text-xs sm:text-sm font-black text-gray-700 hover:bg-gray-50 active:scale-95 transition-transform"
               >
                 Cancel
               </button>
@@ -82,7 +82,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
                 onConfirm();
                 onClose();
               }}
-              className={`px-5 py-2.5 rounded-xl text-white text-sm md:text-base font-black shadow-md active:scale-95 transition-all ${
+              className={`px-4 py-2 rounded-xl text-white text-xs sm:text-sm font-black shadow-md active:scale-95 transition-all ${
                 isRed
                   ? 'bg-red-600 hover:bg-red-700'
                   : 'bg-gold-500 hover:bg-gold-600'

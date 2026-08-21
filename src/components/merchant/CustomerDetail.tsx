@@ -544,7 +544,7 @@ export const CustomerDetail: React.FC<CustomerDetailProps> = ({
         onConfirm={handleConfirmDeleteAll}
         title={t('confirmDeleteAllTitle')}
         message={t('confirmDeleteAllMsg')}
-        confirmText={t('deleteAllEntries')}
+        confirmText={language === 'gu' ? 'બધું કાઢી નાખો' : 'Delete All'}
         type="delete"
       />
 
