@@ -116,8 +116,8 @@ export const AdminDashboard: React.FC = () => {
   const renderLastActiveStatus = (lastActiveAt?: string) => {
     if (!lastActiveAt) {
       return (
-        <span className="text-gray-400 flex items-center gap-1">
-          <span className="w-1.5 h-1.5 rounded-full bg-gray-300"></span>
+        <span className="text-gray-400 flex items-center gap-1.5 font-semibold text-[10px]">
+          <span className="w-2 h-2 rounded-full bg-gray-300"></span>
           Never active
         </span>
       );
@@ -130,29 +130,32 @@ export const AdminDashboard: React.FC = () => {
 
     if (diffMins < 2) {
       return (
-        <span className="text-emerald-600 font-extrabold flex items-center gap-1">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          Live Now 🟢
+        <span className="text-emerald-700 font-black flex items-center gap-1.5 text-[10px]">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+          </span>
+          Live Now
         </span>
       );
     } else if (diffMins < 60) {
       return (
-        <span className="text-amber-600 flex items-center gap-1 font-extrabold">
-          <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+        <span className="text-amber-600 font-extrabold flex items-center gap-1.5 text-[10px]">
+          <span className="w-2 h-2 rounded-full bg-amber-400"></span>
           Active {diffMins}m ago
         </span>
       );
     } else if (diffHours < 24) {
       return (
-        <span className="text-amber-700 flex items-center gap-1 font-bold">
-          <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+        <span className="text-amber-800 font-bold flex items-center gap-1.5 text-[10px]">
+          <span className="w-2 h-2 rounded-full bg-amber-500"></span>
           Active {diffHours}h ago
         </span>
       );
     } else {
       return (
-        <span className="text-red-500 flex items-center gap-1 font-semibold">
-          <span className="w-1.5 h-1.5 rounded-full bg-red-400"></span>
+        <span className="text-red-600 font-bold flex items-center gap-1.5 text-[10px]">
+          <span className="w-2 h-2 rounded-full bg-red-400"></span>
           Active {diffDays}d ago
         </span>
       );
