@@ -46,24 +46,24 @@ export const CustomerDetail: React.FC<CustomerDetailProps> = ({
   const { toggleRokda, removeAllLedgerEntriesForCustomer } = useData();
   const { t, language } = useLanguage();
 
-  const handleDeleteAllEntries = async () => {
-    // 1. Show confirmation dialog
-    const confirmDelete = window.confirm(t('confirmDeleteAllMsg'));
-    if (!confirmDelete) return;
+  const [showDeleteAllConfirm, setShowDeleteAllConfirm] = useState(false);
+  const [showDeleteAllValidationError, setShowDeleteAllValidationError] = useState(false);
+  const [showDeleteAllSuccess, setShowDeleteAllSuccess] = useState(false);
 
-    // 2. Validate that total balance is exactly 0
+  const handleConfirmDeleteAll = async () => {
+    // 1. Validate that total balance is exactly 0
     const isBalanceZero = balance.netMoney === 0 && balance.netGold === 0 && balance.netSilver === 0;
     if (!isBalanceZero) {
-      alert(t('cannotDeleteBalanceNotZero'));
+      setShowDeleteAllValidationError(true);
       return;
     }
 
-    // 3. Delete all entries
+    // 2. Delete all entries
     try {
       await removeAllLedgerEntriesForCustomer(customer.id, entries);
-      alert(language === 'gu' ? 'તમામ વ્યવહાર સફળતાપૂર્વક કાઢી નાખવામાં આવ્યા છે!' : 'All entries deleted successfully!');
+      setShowDeleteAllSuccess(true);
     } catch (e) {
-      alert('Error deleting entries.');
+      console.error('Error deleting entries:', e);
     }
   };
 
@@ -210,7 +210,7 @@ export const CustomerDetail: React.FC<CustomerDetailProps> = ({
         <div className="flex items-center space-x-1.5 md:space-x-2 shrink-0">
           {entries.length > 0 && (
             <button
-              onClick={handleDeleteAllEntries}
+              onClick={() => setShowDeleteAllConfirm(true)}
               className="p-2 md:p-3 bg-red-600 hover:bg-red-700 active:scale-95 text-white rounded-lg text-xs md:text-sm font-bold shadow-2xs flex items-center gap-1 transition-all"
               title={t('deleteAllEntries')}
             >
@@ -534,6 +534,39 @@ export const CustomerDetail: React.FC<CustomerDetailProps> = ({
         title={t('confirmEditTitle')}
         message={t('confirmEditMsg')}
         confirmText={t('saveBtn')}
+        type="edit"
+      />
+
+      {/* DELETE ALL ENTRIES CONFIRMATION MODAL */}
+      <ConfirmModal
+        isOpen={showDeleteAllConfirm}
+        onClose={() => setShowDeleteAllConfirm(false)}
+        onConfirm={handleConfirmDeleteAll}
+        title={t('confirmDeleteAllTitle')}
+        message={t('confirmDeleteAllMsg')}
+        confirmText={t('deleteAllEntries')}
+        type="delete"
+      />
+
+      {/* DELETE ALL BALANCES NOT ZERO WARNING MODAL */}
+      <ConfirmModal
+        isOpen={showDeleteAllValidationError}
+        onClose={() => setShowDeleteAllValidationError(false)}
+        onConfirm={() => setShowDeleteAllValidationError(false)}
+        title={language === 'gu' ? 'ચેતવણી (Warning)' : 'Validation Warning'}
+        message={t('cannotDeleteBalanceNotZero')}
+        confirmText="OK"
+        type="alert"
+      />
+
+      {/* DELETE ALL SUCCESS DIALOG MODAL */}
+      <ConfirmModal
+        isOpen={showDeleteAllSuccess}
+        onClose={() => setShowDeleteAllSuccess(false)}
+        onConfirm={() => setShowDeleteAllSuccess(false)}
+        title={language === 'gu' ? 'સફળતા (Success)' : 'Success'}
+        message={language === 'gu' ? 'તમામ વ્યવહાર સફળતાપૂર્વક કાઢી નાખવામાં આવ્યા છે!' : 'All entries deleted successfully!'}
+        confirmText="OK"
         type="edit"
       />
 

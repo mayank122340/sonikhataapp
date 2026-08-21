@@ -9,7 +9,7 @@ interface ConfirmModalProps {
   title: string;
   message: string;
   confirmText?: string;
-  type?: 'delete' | 'edit' | 'default';
+  type?: 'delete' | 'edit' | 'alert' | 'default';
 }
 
 export const ConfirmModal: React.FC<ConfirmModalProps> = ({
@@ -24,6 +24,8 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
   if (!isOpen) return null;
 
   const isDelete = type === 'delete';
+  const isAlert = type === 'alert';
+  const isRed = isDelete || isAlert;
 
   return createPortal(
     <div className="fixed inset-0 z-[110] bg-gray-950/80 backdrop-blur-xs p-4 flex flex-col justify-center items-center animate-fade-in w-full h-full">
@@ -31,10 +33,12 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
         
         {/* Header */}
         <div className={`p-4 text-white flex items-center justify-between ${
-          isDelete ? 'bg-red-600' : 'bg-gold-500'
+          isRed ? 'bg-red-600' : 'bg-gold-500'
         }`}>
           <div className="flex items-center space-x-2">
-            {isDelete ? (
+            {isAlert ? (
+              <AlertCircle className="w-5 h-5 text-white" />
+            ) : isDelete ? (
               <Trash2 className="w-5 h-5 text-white" />
             ) : (
               <Edit3 className="w-5 h-5 text-white" />
@@ -53,7 +57,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
         <div className="p-4 space-y-3">
           <div className="flex items-start space-x-3">
             <AlertCircle className={`w-5 h-5 shrink-0 mt-0.5 ${
-              isDelete ? 'text-red-500' : 'text-gold-500'
+              isRed ? 'text-red-500' : 'text-gold-500'
             }`} />
             <p className="text-xs font-semibold text-gray-700 leading-relaxed">
               {message}
@@ -62,13 +66,15 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
 
           {/* Action Buttons */}
           <div className="flex justify-end space-x-2 pt-3 border-t border-gray-100">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-3.5 py-2 rounded-xl border border-gray-300 text-xs font-bold text-gray-700 hover:bg-gray-50 active:scale-95"
-            >
-              Cancel
-            </button>
+            {!isAlert && (
+              <button
+                type="button"
+                onClick={onClose}
+                className="px-3.5 py-2 rounded-xl border border-gray-300 text-xs font-bold text-gray-700 hover:bg-gray-50 active:scale-95"
+              >
+                Cancel
+              </button>
+            )}
 
             <button
               type="button"
@@ -77,7 +83,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
                 onClose();
               }}
               className={`px-4 py-2 rounded-xl text-white text-xs font-black shadow-md active:scale-95 transition-all ${
-                isDelete
+                isRed
                   ? 'bg-red-600 hover:bg-red-700'
                   : 'bg-gold-500 hover:bg-gold-600'
               }`}
