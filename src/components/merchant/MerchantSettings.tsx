@@ -3,6 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useData } from '../../context/DataContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { ArrowLeft, HardDrive, Download, Package } from '../common/Icons';
+import { BuildingStage } from '../common/BuildingStage';
 
 interface MerchantSettingsProps {
   onBack: () => void;
@@ -95,61 +96,10 @@ export const MerchantSettings: React.FC<MerchantSettingsProps> = ({ onBack }) =>
   // 2. STOCK VIEW SUB-PAGE PLACEHOLDER
   const renderStockView = () => {
     return (
-      <div className="bg-white rounded-xl border border-gray-200 shadow-2xs overflow-hidden">
-        {/* Sub-page Header */}
-        <div className="bg-amber-900 text-white px-4 py-3 flex items-center gap-2">
-          <Package className="w-4 h-4 text-amber-300 shrink-0" />
-          <div>
-            <h3 className="text-xs font-bold text-white">સ્ટોક મેનેજમેન્ટ (Stock Management)</h3>
-            <p className="text-[10px] text-amber-200 font-medium">Inventory & Item Tracking</p>
-          </div>
-        </div>
-
-        {/* Mock Body */}
-        <div className="p-4 md:p-6 space-y-6">
-          <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs md:text-sm text-amber-900 font-bold leading-relaxed">
-            ℹ️ વસ્તુઓ અને સ્ટોકનું ટ્રેકિંગ આગળના તબક્કામાં ઉમેરવામાં આવશે. (Items and stock tracking page details will be set up in the next step.)
-          </div>
-
-          {/* Mock Search & Action Controls */}
-          <div className="flex items-center justify-between gap-2 border-b pb-3.5">
-            <div className="bg-gray-100 px-3 py-2 rounded-lg text-xs font-semibold text-gray-500 w-full max-w-xs">
-              Search stock items...
-            </div>
-            <button disabled className="px-3.5 py-2 bg-amber-700 opacity-60 text-white text-xs font-bold rounded-lg shrink-0 cursor-not-allowed">
-              + Add Item (સ્ટોક ઉમેરો)
-            </button>
-          </div>
-
-          {/* Mock Stock Table */}
-          <div className="overflow-x-auto border border-gray-100 rounded-xl">
-            <table className="w-full text-left text-xs border-collapse">
-              <thead>
-                <tr className="bg-gray-50 text-gray-500 uppercase text-[9px] font-black border-b border-gray-100">
-                  <th className="py-2.5 px-3">વસ્તુ (Item Name)</th>
-                  <th className="py-2.5 px-3 text-center">પ્રકાર (Type)</th>
-                  <th className="py-2.5 px-3 text-center">વજન (Weight)</th>
-                  <th className="py-2.5 px-3 text-right">જથ્થો (Qty)</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100 text-gray-700 font-bold">
-                <tr>
-                  <td className="py-2 px-3 text-gray-900">સોનાની વીંટી (Gold Ring)</td>
-                  <td className="py-2 px-3 text-center text-amber-600">Gold</td>
-                  <td className="py-2 px-3 text-center">5.420 g</td>
-                  <td className="py-2 px-3 text-right">2 Pcs</td>
-                </tr>
-                <tr>
-                  <td className="py-2 px-3 text-gray-900">ચાંદીના સાંકળા (Silver Payal)</td>
-                  <td className="py-2 px-3 text-center text-slate-600">Silver</td>
-                  <td className="py-2 px-3 text-center">120.000 g</td>
-                  <td className="py-2 px-3 text-right">1 Pair</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+      <BuildingStage
+        title={language === 'gu' ? 'સ્ટોક મેનેજમેન્ટ' : 'Stock Management'}
+        onBack={() => setActiveView('menu')}
+      />
     );
   };
 
